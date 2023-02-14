@@ -1,4 +1,4 @@
-# ceres
+# Ceres - Frontend for the MyKitchen app
 
 ## Project setup
 ```
