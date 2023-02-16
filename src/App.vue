@@ -1,3 +1,9 @@
+<script setup>
+import { useMainStore } from "./stores/MainStore";
+
+const mainStore = useMainStore();
+</script>
+
 <template>
   <v-app>
     <v-app-bar color="primary" prominent>
@@ -35,7 +41,7 @@
       </template>
       <v-divider></v-divider>
       <v-list density="compact" nav>
-        <router-link to="/about" class="router-link"
+        <router-link to="/about" class="router-link" v-if="mainStore.isLoggedIn"
           ><v-list-item prepend-icon="mdi-logout"
             >Logout</v-list-item
           ></router-link
@@ -43,7 +49,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container fluid>
+      <v-container>
         <router-view />
       </v-container>
     </v-main>
