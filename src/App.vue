@@ -1,15 +1,19 @@
 <template>
   <v-app>
-    <v-layout>
-      <v-app-bar color="primary" prominent>
-        <v-app-bar-nav-icon
-          @click="drawer = !drawer"
-          class="d-flex d-sm-none"
-        ></v-app-bar-nav-icon>
-        <v-toolbar-title>MyKitchen</v-toolbar-title>
+    <v-app-bar color="primary" prominent>
+      <v-toolbar-title>MyKitchen</v-toolbar-title>
 
-        <v-spacer></v-spacer>
-        <router-link
+      <v-spacer></v-spacer>
+      <Transition name="pop">
+        <p class="avatar-name" v-if="drawer">Jane Smith</p>
+      </Transition>
+      <v-btn icon>
+        <v-avatar
+          @click="drawer = !drawer"
+          image="https://randomuser.me/api/portraits/women/81.jpg"
+        ></v-avatar>
+      </v-btn>
+      <!-- <router-link
           v-for="route of routes"
           :key="route.to"
           class="d-none d-sm-flex mr-3 router-link"
@@ -18,16 +22,30 @@
           <v-btn variant="tonal">
             {{ route.name }}
           </v-btn>
-        </router-link>
-      </v-app-bar>
-      <v-navigation-drawer v-model="drawer" absolute temporary>
-        <router-link v-for="route of routes" :key="route.to" :to="route.to">{{
-          route.name
-        }}</router-link>
-      </v-navigation-drawer>
-    </v-layout>
+        </router-link> -->
+    </v-app-bar>
+    <v-navigation-drawer v-model="drawer" temporary location="right">
+      <template v-slot:prepend>
+        <v-list-item
+          lines="two"
+          prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
+          title="Jane Smith"
+          subtitle="Logged in"
+        ></v-list-item>
+      </template>
+      <v-divider></v-divider>
+      <v-list density="compact" nav>
+        <router-link to="/about" class="router-link"
+          ><v-list-item prepend-icon="mdi-logout"
+            >Logout</v-list-item
+          ></router-link
+        >
+      </v-list>
+    </v-navigation-drawer>
     <v-main>
-      <router-view />
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -70,6 +88,16 @@ nav a.router-link-exact-active {
 
 .router-link {
   text-decoration: none;
-  color: white;
+}
+
+.pop-enter-active,
+.pop-leave.active {
+  transition: all 0.2s ease;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
 }
 </style>
