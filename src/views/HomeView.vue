@@ -1,7 +1,8 @@
 <template>
   <v-row>
-    <v-col cols="10">
+    <v-col cols="12" lg="10">
       <v-text-field
+        id="search-box"
         label="Search"
         prepend-inner-icon="mdi-magnify"
         clearable
@@ -12,7 +13,7 @@
         <RecipeSearchResults></RecipeSearchResults>
       </v-row>
     </v-col>
-    <v-col cols="2">
+    <v-col cols="12" lg="2">
       <h1>Pantry</h1>
     </v-col>
   </v-row>
