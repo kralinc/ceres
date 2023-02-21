@@ -20,15 +20,15 @@ const mainStore = useMainStore();
         ></v-avatar>
       </v-btn>
       <!-- <router-link
-          v-for="route of routes"
-          :key="route.to"
-          class="d-none d-sm-flex mr-3 router-link"
-          :to="route.to"
-        >
-          <v-btn variant="tonal">
-            {{ route.name }}
-          </v-btn>
-        </router-link> -->
+                v-for="route of routes"
+                :key="route.to"
+                class="d-none d-sm-flex mr-3 router-link"
+                :to="route.to"
+              >
+                <v-btn variant="tonal">
+                  {{ route.name }}
+                </v-btn>
+              </router-link> -->
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary location="right">
       <template v-slot:prepend>
@@ -44,6 +44,11 @@ const mainStore = useMainStore();
         <router-link to="/about" class="router-link" v-if="mainStore.isLoggedIn"
           ><v-list-item prepend-icon="mdi-logout"
             >Logout</v-list-item
+          ></router-link
+        >
+        <router-link to="/login" class="router-link" v-if="mainStore.isLoggedIn"
+          ><v-list-item prepend-icon="mdi-login"
+            >Login</v-list-item
           ></router-link
         >
       </v-list>
@@ -64,6 +69,7 @@ export default {
       routes: [
         { to: "/", name: "Home" },
         { to: "/about", name: "About" },
+        { to: "/login", name: "Login" },
       ],
     };
   },
