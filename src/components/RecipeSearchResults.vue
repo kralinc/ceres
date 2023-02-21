@@ -1,12 +1,16 @@
+<script setup>
+import RecipeCardList from "./recipecards/RecipeCard.vue";
+</script>
+
 <template>
-  <v-col v-for="recipe of recipes" :key="recipe.id" cols="12">
-    <v-card variant="tonal" class="recipe-card text-truncate">
-      <v-card-title>{{ recipe.name }}</v-card-title>
-      {{ recipe.description }}
-      <v-spacer></v-spacer>
-      <v-rating readonly density="compact" v-model="recipe.rating"></v-rating>
-    </v-card>
-  </v-col>
+  <v-row v-if="cardType === 'list'">
+    <RecipeCardList
+      v-for="recipe of recipes"
+      :key="recipe.id"
+      v-bind:recipeProp="recipe"
+      v-bind:cardType="cardType"
+    ></RecipeCardList>
+  </v-row>
 </template>
 
 <script>
@@ -16,6 +20,7 @@ export default {
   },
   data() {
     return {
+      cardType: "list",
       recipes: [
         {
           id: 1,
@@ -23,6 +28,7 @@ export default {
           description:
             "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.\n\nMaecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.",
           rating: 4,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 2,
@@ -30,6 +36,7 @@ export default {
           description:
             "Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.",
           rating: 1,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 3,
@@ -37,6 +44,7 @@ export default {
           description:
             "Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\n\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
           rating: 2,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 4,
@@ -44,6 +52,7 @@ export default {
           description:
             "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.",
           rating: 5,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 5,
@@ -51,6 +60,7 @@ export default {
           description:
             "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
           rating: 2,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 6,
@@ -58,6 +68,7 @@ export default {
           description:
             "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.",
           rating: 5,
+          image: "https://placekitten.com/200/200",
         },
         {
           id: 7,
@@ -65,16 +76,10 @@ export default {
           description:
             "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
           rating: 5,
+          image: "https://placekitten.com/200/200",
         },
       ],
     };
   },
 };
 </script>
-
-<style>
-.recipe-card {
-  max-height: 200px;
-  padding: 5px;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" lg="10">
+    <v-col cols="12" lg="12">
       <v-text-field
         id="search-box"
         label="Search"
@@ -9,12 +9,7 @@
         variant="solo"
         @click:clear="onClear"
       ></v-text-field>
-      <v-row>
-        <RecipeSearchResults></RecipeSearchResults>
-      </v-row>
-    </v-col>
-    <v-col cols="12" lg="2">
-      <h1>Pantry</h1>
+      <RecipeSearchResults></RecipeSearchResults>
     </v-col>
   </v-row>
 </template>
