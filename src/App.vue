@@ -19,16 +19,6 @@ const mainStore = useMainStore();
           image="https://randomuser.me/api/portraits/women/81.jpg"
         ></v-avatar>
       </v-btn>
-      <!-- <router-link
-                v-for="route of routes"
-                :key="route.to"
-                class="d-none d-sm-flex mr-3 router-link"
-                :to="route.to"
-              >
-                <v-btn variant="tonal">
-                  {{ route.name }}
-                </v-btn>
-              </router-link> -->
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary location="right">
       <template v-slot:prepend>
