@@ -47,6 +47,12 @@ const mainStore = useMainStore();
       <v-container>
         <router-view />
       </v-container>
+      <v-snackbar
+        id="popup"
+        :timeout="3000"
+        color="danger"
+        variant="outlined"
+      ></v-snackbar>
     </v-main>
   </v-app>
 </template>
