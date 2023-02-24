@@ -1,9 +1,3 @@
-<script setup>
-import { useMainStore } from "./stores/MainStore";
-
-const mainStore = useMainStore();
-</script>
-
 <template>
   <v-app>
     <v-app-bar color="primary" prominent>
@@ -49,15 +43,25 @@ const mainStore = useMainStore();
       </v-container>
       <v-snackbar
         id="popup"
-        :timeout="3000"
-        color="danger"
+        v-model="mainStore.snackbar.active"
+        :timeout="-1"
+        :color="mainStore.snackbar.color"
         variant="outlined"
-      ></v-snackbar>
+        vertical
+      >
+        {{ mainStore.snackbar.message }}
+        <v-btn text @click="mainStore.snackbar.active = false">
+          Close
+        </v-btn></v-snackbar
+      >
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "./stores/MainStore";
+
 export default {
   data() {
     return {
@@ -68,6 +72,9 @@ export default {
         { to: "/login", name: "Login" },
       ],
     };
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>
