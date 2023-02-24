@@ -1,0 +1,57 @@
+<script setup>
+import { useMainStore } from "@/stores/MainStore";
+
+const mainStore = useMainStore();
+</script>
+
+<template>
+  <v-app-bar color="primary" prominent>
+    <v-toolbar-title>MyKitchen</v-toolbar-title>
+
+    <v-spacer></v-spacer>
+    <Transition name="pop">
+      <p class="avatar-name" v-if="drawer">Jane Smith</p>
+    </Transition>
+    <v-btn icon>
+      <v-avatar
+        @click="drawer = !drawer"
+        image="https://randomuser.me/api/portraits/women/81.jpg"
+      ></v-avatar>
+    </v-btn>
+  </v-app-bar>
+  <v-navigation-drawer v-model="drawer" temporary location="right">
+    <template v-slot:prepend>
+      <v-list-item
+        lines="two"
+        prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
+        title="Jane Smith"
+        subtitle="Logged in"
+      ></v-list-item>
+    </template>
+    <v-divider></v-divider>
+    <v-list density="compact" nav>
+      <router-link to="/about" class="router-link" v-if="mainStore.isLoggedIn"
+        ><v-list-item prepend-icon="mdi-logout"
+          >Logout</v-list-item
+        ></router-link
+      >
+      <router-link to="/login" class="router-link" v-if="mainStore.isLoggedIn"
+        ><v-list-item prepend-icon="mdi-login">Login</v-list-item></router-link
+      >
+    </v-list>
+  </v-navigation-drawer>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      drawer: false,
+      routes: [
+        { to: "/", name: "Home" },
+        { to: "/about", name: "About" },
+        { to: "/login", name: "Login" },
+      ],
+    };
+  },
+};
+</script>
