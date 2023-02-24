@@ -3,7 +3,12 @@
     <v-card variant="tonal" class="recipe-card">
       <v-row>
         <v-col cols="4" class="d-flex">
-          <v-img class="img-fluid" :src="recipe.image" />
+          <v-img
+            class="img-fluid"
+            :src="
+              recipe.image ? recipe.image : 'https://placekitten.com/200/200'
+            "
+          />
         </v-col>
         <v-col cols="8">
           <v-card-title>{{ recipe.name }}</v-card-title>
@@ -57,6 +62,6 @@ export default {
 }
 
 .img-fluid {
-  max-width: 240px;
+  max-width: 200px;
 }
 </style>
