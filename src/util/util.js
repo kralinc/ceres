@@ -5,10 +5,12 @@ export function buildUrl(url) {
 }
 
 export async function getReq(url, snackbarMethod) {
-  fetch(url)
+  return await fetch(buildUrl(url))
     .then((response) => {
       if (response.ok) {
         return response.json();
+      } else if (response.status === 404) {
+        throw new Error("404 Not Found");
       } else {
         throw new Error("Something went wrong");
       }

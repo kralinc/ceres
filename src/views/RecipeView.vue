@@ -1,5 +1,5 @@
 <template>
-  <div>Recipe #{{ $route.params.id }}</div>
+  <div>Recipe #{{ recipe }}</div>
 </template>
 
 <script>
@@ -23,14 +23,11 @@ export default {
   },
   methods: {
     async loadRecipe(id) {
-      this.recipe = await getReq(
-        "/api/v1/recipes/" + id,
-        this.showLoadRecipeError
-      );
+      this.recipe = await getReq("recipes/" + id, this.showLoadRecipeError);
     },
 
     showLoadRecipeError() {
-      this.mainStore.setSnackbar("There was a problem loading the recipes!");
+      this.mainStore.setSnackbar("There was a problem loading the recipe!");
     },
   },
 };
