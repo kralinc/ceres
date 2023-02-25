@@ -49,7 +49,7 @@ export default {
       searchValue: "",
       recipes: [],
       page: 1,
-      numPages: 3,
+      numPages: 1,
       pageSize: 10,
     };
   },
@@ -76,8 +76,8 @@ export default {
         const data = {
           query: { method: "name", value: searchValue },
           page: {
-            pageNumber: "" + this.page,
-            pageSize: parseInt(this.pageSize) - 1,
+            pageNumber: parseInt(this.page) - 1,
+            pageSize: parseInt(this.pageSize),
           },
         };
         const recipeResponse = await postReq(
@@ -85,8 +85,9 @@ export default {
           data,
           this.showFailedRecipeSearchError
         );
-        this.recipes = recipeResponse;
-        if (this.recipes.length === 0) {
+        this.recipes = recipeResponse.results;
+        this.numPages = recipeResponse.count;
+        if (this.recipes.results.length === 0) {
           this.mainStore.setSnackbar("Search returned no results.");
         }
       }
