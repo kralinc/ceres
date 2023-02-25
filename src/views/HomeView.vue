@@ -22,7 +22,9 @@
 
 <script>
 import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
-import { buildUrl } from "@/util/util.js";
+import { getReq } from "@/util/util.js";
+import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
 
 export default {
   name: "HomeView",
@@ -34,11 +36,14 @@ export default {
       numPages: 1,
     };
   },
+  computed: {
+    ...mapStores(useMainStore),
+  },
   methods: {
     onClear() {
       this.fetchRecipesEvent({ target: { value: "" } });
     },
-    fetchRecipesEvent(event) {
+    async fetchRecipesEvent(event) {
       this.searchCounter++;
       let currentSearchCounter = this.searchCounter;
       let searchValue = event.target.value;
@@ -48,18 +53,18 @@ export default {
         }, 400);
       }
     },
-    fetchRecipes(currentSearchCounter, searchValue) {
+    async fetchRecipes(currentSearchCounter, searchValue) {
       if (this.searchCounter === currentSearchCounter) {
-        fetch(buildUrl("recipes?name_like=" + searchValue))
-          .then((response) => response.json())
-          .then((data) => {
-            this.recipes = data;
-          })
-          .catch((error) => {
-            console.error("OOF GOT DAM");
-            console.error(error);
-          });
+        this.recipes = await getReq(
+          "recipes?name_like=" + searchValue,
+          this.showFailedRecipeSearchError
+        );
       }
+    },
+    showFailedRecipeSearchError() {
+      this.mainStore.setSnackbar(
+        "There was an error while performing your search."
+      );
     },
   },
   components: { RecipeSearchResults },
