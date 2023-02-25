@@ -1,5 +1,5 @@
 <template>
-  <div>Recipe #{{ recipe }}</div>
+  <div>Recipe Object: {{ recipe }}</div>
 </template>
 
 <script>
