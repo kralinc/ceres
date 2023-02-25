@@ -2,7 +2,12 @@
   <v-card class="pa-5">
     <v-card-title class="text-h6 text-md-h5 text-lg-h4">Sign In</v-card-title>
     <v-form class="my-8" @submit.prevent="submit">
-      <v-text-field class="mx-3 my-1" label="Username" required></v-text-field>
+      <v-text-field
+        v-model="username"
+        class="mx-3 my-1"
+        label="Username"
+        required
+      ></v-text-field>
 
       <v-text-field
         v-model="password"
@@ -24,7 +29,34 @@ export default {
   data() {
     return {
       showPassLogin: true,
+      username: "",
+      password: "",
     };
+  },
+  methods: {
+    submitLogin() {
+      fetch("http://localhost:8080/v1/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: this.username,
+          password: this.password,
+        }),
+      })
+        .then((response) =>
+          response.text().then((text) => {
+            // Make this more comprehensive and thorough
+            if (response.status == "200") {
+              localStorage.setItem("token", text);
+            } else if (!response.ok) {
+              throw new Error(text);
+            }
+          })
+        )
+        .catch((e) => console.log(e.message));
+    },
   },
 };
 </script>

@@ -42,7 +42,7 @@
           :type="showPass ? 'text' : 'password'"
           name="input-10-1"
           label="Create Password"
-          @click:append-inner="showPassSignUp = !showPassSignUp"
+          @click:append-inner="showPass = !showPass"
           class="mx-3 my-1"
         ></v-text-field>
 
@@ -52,7 +52,7 @@
           :type="showPassConfirm ? 'text' : 'password'"
           name="input-10-1"
           label="Reenter Password"
-          @click:append-inner="showPassSignUp = !showPassSignUp"
+          @click:append-inner="showPassConfirm = !showPassConfirm"
           class="mx-3 my-1"
         ></v-text-field>
 
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     submitSignUp() {
-      fetch("http://localhost:8080/signup", {
+      fetch("http://localhost:8080/v1/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,8 +100,17 @@ export default {
           password: this.user.password,
         }),
       })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((response) =>
+          response.text().then((text) => {
+            // Make this more comprehensive and thorough
+            if (response.status == "201") {
+              console.log(text);
+            } else if (!response.ok) {
+              throw new Error(text);
+            }
+          })
+        )
+        .catch((e) => console.log(e.message));
     },
   },
 };
