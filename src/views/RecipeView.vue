@@ -23,7 +23,10 @@ export default {
   },
   methods: {
     async loadRecipe(id) {
-      this.recipe = await getReq("recipes/" + id, this.showLoadRecipeError);
+      this.recipe = await getReq(
+        "v1/api/recipes/getRecipe?id=" + id,
+        this.showLoadRecipeError
+      );
     },
 
     showLoadRecipeError() {

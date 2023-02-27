@@ -1,5 +1,10 @@
 <template>
-  <v-col cols="12" lg="6" v-if="cardType === 'list'">
+  <v-col
+    cols="12"
+    lg="6"
+    v-if="cardType === 'list'"
+    @click="gotoRecipePage(recipe.id)"
+  >
     <v-card variant="tonal" class="recipe-card">
       <v-row>
         <v-col cols="4" class="d-flex">

@@ -24,6 +24,8 @@ export async function getReq(url, snackbarMethod) {
     .then((response) => {
       if (response.ok) {
         return response.json();
+      } else if (response.status === 403) {
+        throw new Error("403 Not Authorized");
       } else if (response.status === 404) {
         throw new Error("404 Not Found");
       } else {
