@@ -3,11 +3,7 @@
     cols="12"
     lg="6"
     v-if="cardType === 'list'"
-    @click="
-      () => {
-        gotoRecipePage(recipe.id);
-      }
-    "
+    @click="gotoRecipePage(recipe.id)"
   >
     <v-card variant="tonal" class="recipe-card">
       <v-row>
@@ -23,6 +19,7 @@
           <v-card-title>{{ recipe.name }}</v-card-title>
           {{ description }}
           <v-spacer></v-spacer>
+          <p>Cook time: {{ recipe.cookTime }} min.</p>
           <v-rating
             readonly
             density="compact"
