@@ -18,6 +18,9 @@
 </template>
 
 <script>
+//import { mapStores } from "pinia";
+//import { useMainStore } from "@/stores/MainStore";
+
 export default {
   data() {
     return {

@@ -1,9 +1,3 @@
-<script setup>
-import { useMainStore } from "@/stores/MainStore";
-
-const mainStore = useMainStore();
-</script>
-
 <template>
   <v-app-bar color="primary" prominent>
     <v-toolbar-title>MyKitchen</v-toolbar-title>
@@ -30,18 +24,26 @@ const mainStore = useMainStore();
     </template>
     <v-divider></v-divider>
     <v-list density="compact" nav>
-      <router-link to="/about" class="router-link" v-if="mainStore.isLoggedIn"
-        ><v-list-item prepend-icon="mdi-logout"
-          >Logout</v-list-item
-        ></router-link
+      <router-link to="/about" class="router-link"
+        ><v-list-item>About</v-list-item></router-link
       >
-      <router-link to="/login" class="router-link" v-if="mainStore.isLoggedIn"
+      <router-link to="/login" class="router-link" v-if="!mainStore.isLoggedIn"
         ><v-list-item prepend-icon="mdi-login">Login</v-list-item></router-link
+      >
+
+      <v-list-item
+        @click="LogOff()"
+        prepend-icon="mdi-logout"
+        v-if="mainStore.isLoggedIn"
+        >Log Off</v-list-item
       >
     </v-list>
   </v-navigation-drawer>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
+
 export default {
   data() {
     return {
@@ -52,6 +54,15 @@ export default {
         { to: "/login", name: "Login" },
       ],
     };
+  },
+  methods: {
+    LogOff() {
+      localStorage.removeItem("token");
+      this.mainStore.setLogin(false);
+    },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>

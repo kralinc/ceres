@@ -25,6 +25,9 @@
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
+
 export default {
   data() {
     return {
@@ -50,13 +53,18 @@ export default {
             // Make this more comprehensive and thorough
             if (response.status == "200") {
               localStorage.setItem("token", text);
+              this.mainStore.setLogin(true);
+              this.$router.push("/");
             } else if (!response.ok) {
               throw new Error(text);
             }
           })
         )
-        .catch((e) => console.log(e.message));
+        .catch((e) => this.mainStore.setSnackbar(e.message, "red-darken-3"));
     },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>
