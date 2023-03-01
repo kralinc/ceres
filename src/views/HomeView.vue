@@ -8,58 +8,98 @@
         clearable
         variant="solo"
         @click:clear="onClear"
-        @input="fetchRecipesEvent($event)"
+        @input="fetchRecipesEvent"
+        v-model="searchValue"
       ></v-text-field>
       <RecipeSearchResults v-bind:recipes="recipes"></RecipeSearchResults>
-      <v-pagination
-        v-model="page"
-        class="my-4"
-        :length="numPages"
-      ></v-pagination>
+      <v-row>
+        <v-col cols="10">
+          <v-pagination
+            v-model="page"
+            class="my-4"
+            :length="numPages"
+            @update:model-value="changePage"
+          ></v-pagination>
+        </v-col>
+        <v-col cols="2">
+          <v-select
+            label="Page Size"
+            :items="[10, 15, 25, 50]"
+            v-model="pageSize"
+            class="pageSizeSelect"
+            @update:model-value="fetchRecipesEvent"
+          ></v-select>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
 
 <script>
 import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
-import { buildUrl } from "@/util/util.js";
+import { postReq } from "@/util/util.js";
+import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
 
 export default {
   name: "HomeView",
   data() {
     return {
       searchCounter: 0,
+      searchValue: "",
       recipes: [],
       page: 1,
       numPages: 1,
+      pageSize: 10,
     };
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
   methods: {
     onClear() {
       this.fetchRecipesEvent({ target: { value: "" } });
     },
-    fetchRecipesEvent(event) {
+    async fetchRecipesEvent() {
       this.searchCounter++;
       let currentSearchCounter = this.searchCounter;
-      let searchValue = event.target.value;
-      if (searchValue.length > 2) {
+      if (this.searchValue.length > 2) {
         setTimeout(() => {
-          this.fetchRecipes(currentSearchCounter, searchValue);
+          this.fetchRecipes(currentSearchCounter, this.searchValue);
         }, 400);
       }
     },
-    fetchRecipes(currentSearchCounter, searchValue) {
+    async fetchRecipes(currentSearchCounter, searchValue, pageNumber = 1) {
       if (this.searchCounter === currentSearchCounter) {
-        fetch(buildUrl("recipes?name_like=" + searchValue))
-          .then((response) => response.json())
-          .then((data) => {
-            this.recipes = data;
-          })
-          .catch((error) => {
-            console.error("OOF GOT DAM");
-            console.error(error);
-          });
+        this.page = pageNumber;
+        this.mainStore.snackbar.active = false;
+        const data = {
+          query: { method: "name", value: searchValue },
+          page: {
+            pageNumber: parseInt(this.page) - 1,
+            pageSize: parseInt(this.pageSize),
+          },
+        };
+        const recipeResponse = await postReq(
+          "v1/api/recipes/queryRecipes",
+          data,
+          this.showFailedRecipeSearchError
+        );
+        this.recipes = recipeResponse.results;
+        this.numPages = recipeResponse.count;
+        if (this.recipes.length === 0) {
+          this.mainStore.setSnackbar("Search returned no results.");
+        }
       }
+    },
+    async changePage() {
+      await this.fetchRecipes(this.searchCounter, this.searchValue, this.page);
+      window.scrollTo(0, 0);
+    },
+    showFailedRecipeSearchError() {
+      this.mainStore.setSnackbar(
+        "There was an error while performing your search."
+      );
     },
   },
   components: { RecipeSearchResults },
