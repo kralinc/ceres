@@ -5,6 +5,19 @@
       <v-container>
         <router-view />
       </v-container>
+      <v-snackbar
+        id="popup"
+        v-model="mainStore.snackbar.active"
+        :timeout="-1"
+        :color="mainStore.snackbar.color"
+        variant="outlined"
+        vertical
+      >
+        {{ mainStore.snackbar.message }}
+        <v-btn text @click="mainStore.snackbar.active = false">
+          Close
+        </v-btn></v-snackbar
+      >
     </v-main>
   </v-app>
 </template>
@@ -12,7 +25,23 @@
 <script>
 import NavBar from "./components/NavBar.vue";
 
+import { mapStores } from "pinia";
+import { useMainStore } from "./stores/MainStore";
+
 export default {
+  data() {
+    return {
+      drawer: false,
+      routes: [
+        { to: "/", name: "Home" },
+        { to: "/about", name: "About" },
+        { to: "/login", name: "Login" },
+      ],
+    };
+  },
+  computed: {
+    ...mapStores(useMainStore),
+  },
   components: { NavBar },
 };
 </script>
