@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useMainStore = defineStore("main", {
   state: () => {
     return {
-      jwt: 0,
+      auth: true,
       snackbar: { active: false, color: "", message: "" },
     };
   },
@@ -13,8 +13,14 @@ export const useMainStore = defineStore("main", {
       this.snackbar.message = message;
       this.snackbar.color = color ? color : "red-darken-3";
     },
+    setLogin(isLoggedIn) {
+      console.log("I GOT IT");
+      this.auth = isLoggedIn;
+    },
   },
   getters: {
-    isLoggedIn: () => true,
+    isLoggedIn: (state) => {
+      return state.auth;
+    },
   },
 });
