@@ -17,39 +17,57 @@
     </v-col>
   </v-row>
   <v-row>
-    <!-- <PantryCard
+    <template
       v-for="pantryItem of visiblePantryItems"
       v-bind:key="pantryItem.id"
-      v-bind:pantryItem="pantryItem"
-    ></PantryCard> -->
-    <v-col cols="12">
-      <v-table>
-        <thead>
-          <th>Name</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-        </thead>
-        <tbody>
-          <tr v-for="pantryItem of visiblePantryItems" :key="pantryItem.id">
-            <td>{{ pantryItem.foodItem.description }}</td>
-            <td>
-              <v-text-field
-                :name="'quantity' + pantryItem.id"
-                type="number"
-                v-model="pantryItem.quantity"
-              ></v-text-field>
-            </td>
-            <td>{{ pantryItem.unit }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-col>
+    >
+      <PantryCard
+        v-bind:pantryItem="pantryItem"
+        @click="showDialogWithItem(pantryItem)"
+      ></PantryCard>
+    </template>
   </v-row>
+  <v-dialog
+    v-model="dialog"
+    transition="dialog-bottom-transition"
+    :fullscreen="smAndDown"
+  >
+    <v-toolbar dark color="primary">
+      <v-btn icon dark @click="dialog = false">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <v-toolbar-title>{{ dialogItem.foodItem.description }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn variant="text" @click="dialog = false"> Save </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-card>
+      <v-row>
+        <v-col cols="12" md="3">
+          <v-img :src="'https://placekitten.com/600/450'"></v-img>
+        </v-col>
+        <v-col cols="12" md="9">
+          <v-text-field
+            type="number"
+            v-model="dialogItem.quantity"
+          ></v-text-field>
+          <p>{{ dialogItem.unit }}</p>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-dialog>
 </template>
 <script>
-// import PantryCard from "@/components/PantryCard.vue";
+import { useDisplay } from "vuetify";
+import PantryCard from "@/components/PantryCard.vue";
 export default {
   name: "PantryView",
+  setup() {
+    const { smAndDown } = useDisplay();
+
+    return { smAndDown };
+  },
   data() {
     return {
       pantryItems: [
@@ -92,6 +110,8 @@ export default {
       ],
       visiblePantryItems: [],
       searchValue: "",
+      dialog: false,
+      dialogItem: {},
     };
   },
   methods: {
@@ -105,12 +125,16 @@ export default {
           .includes(this.searchValue.toLowerCase())
       );
     },
+    showDialogWithItem(pantryItem) {
+      this.dialogItem = pantryItem;
+      this.dialog = true;
+    },
   },
   mounted() {
     this.visiblePantryItems = this.pantryItems;
   },
   components: {
-    // PantryCard,
+    PantryCard,
   },
 };
 </script>

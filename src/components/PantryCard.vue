@@ -1,19 +1,21 @@
 <template>
-  <v-col cols="6" lg="4" xl="2">
+  <v-col cols="6" sm="4" lg="3" xl="2" class="card">
     <v-card variant="tonal">
-      <v-card-title>{{ pantryItem.foodItem.description }}</v-card-title>
-      <v-row>
-        <v-col cols="12" sm="9">
-          <v-text-field
-            :name="'quantity' + pantryItem.id"
-            type="number"
-            v-model="itemQuantity"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="3" class="d-flex">
-          <label :for="'quantity' + pantryItem.id">{{ pantryItem.unit }}</label>
-        </v-col>
-      </v-row>
+      <v-img
+        :src="'https://placekitten.com/600/450'"
+        class="align-end"
+        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+        height="200px"
+        cover
+      >
+        <v-card-title
+          class="text-white"
+          v-text="pantryItem.foodItem.description"
+        ></v-card-title>
+      </v-img>
+      <v-card-text>
+        <h3>{{ pantryItem.quantity }} {{ pantryItem.unit }}</h3>
+      </v-card-text>
     </v-card>
   </v-col>
 </template>
@@ -29,3 +31,8 @@ export default {
   },
 };
 </script>
+<style>
+.card {
+  max-width: 200px;
+}
+</style>
