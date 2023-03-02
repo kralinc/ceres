@@ -17,15 +17,37 @@
     </v-col>
   </v-row>
   <v-row>
-    <PantryCard
+    <!-- <PantryCard
       v-for="pantryItem of visiblePantryItems"
       v-bind:key="pantryItem.id"
       v-bind:pantryItem="pantryItem"
-    ></PantryCard>
+    ></PantryCard> -->
+    <v-col cols="12">
+      <v-table>
+        <thead>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+        </thead>
+        <tbody>
+          <tr v-for="pantryItem of visiblePantryItems" :key="pantryItem.id">
+            <td>{{ pantryItem.foodItem.description }}</td>
+            <td>
+              <v-text-field
+                :name="'quantity' + pantryItem.id"
+                type="number"
+                v-model="pantryItem.quantity"
+              ></v-text-field>
+            </td>
+            <td>{{ pantryItem.unit }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-col>
   </v-row>
 </template>
 <script>
-import PantryCard from "@/components/PantryCard.vue";
+// import PantryCard from "@/components/PantryCard.vue";
 export default {
   name: "PantryView",
   data() {
@@ -78,7 +100,9 @@ export default {
     },
     filterPantry() {
       this.visiblePantryItems = this.pantryItems.filter((item) =>
-        item.foodItem.description.includes(this.searchValue)
+        item.foodItem.description
+          .toLowerCase()
+          .includes(this.searchValue.toLowerCase())
       );
     },
   },
@@ -86,7 +110,7 @@ export default {
     this.visiblePantryItems = this.pantryItems;
   },
   components: {
-    PantryCard,
+    // PantryCard,
   },
 };
 </script>
