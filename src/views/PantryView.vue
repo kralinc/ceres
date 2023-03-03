@@ -27,47 +27,16 @@
       ></PantryCard>
     </template>
   </v-row>
-  <v-dialog
+  <PantryItemDialog
     v-model="dialog"
-    transition="dialog-bottom-transition"
-    :fullscreen="smAndDown"
-  >
-    <v-toolbar dark color="primary">
-      <v-btn icon dark @click="dialog = false">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      <v-toolbar-title>{{ dialogItem.foodItem.description }}</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn variant="text" @click="dialog = false"> Save </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-    <v-card>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-img :src="'https://placekitten.com/600/450'"></v-img>
-        </v-col>
-        <v-col cols="12" md="9">
-          <v-text-field
-            type="number"
-            v-model="dialogItem.quantity"
-          ></v-text-field>
-          <p>{{ dialogItem.unit }}</p>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-dialog>
+    v-bind:dialogItem="dialogItem"
+  ></PantryItemDialog>
 </template>
 <script>
-import { useDisplay } from "vuetify";
 import PantryCard from "@/components/PantryCard.vue";
+import PantryItemDialog from "@/components/pantrydialogs/PantryItemDialog.vue";
 export default {
   name: "PantryView",
-  setup() {
-    const { smAndDown } = useDisplay();
-
-    return { smAndDown };
-  },
   data() {
     return {
       pantryItems: [
@@ -135,6 +104,7 @@ export default {
   },
   components: {
     PantryCard,
+    PantryItemDialog,
   },
 };
 </script>

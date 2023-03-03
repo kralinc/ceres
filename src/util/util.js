@@ -41,6 +41,7 @@ export async function getReq(url, snackbarMethod) {
 
 // Example POST method implementation:
 export async function postReq(url = "", data = {}, snackbarMethod) {
+  const token = localStorage.getItem("token");
   // Default options are marked with *
   const response = await fetch(buildUrl(url), {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -49,6 +50,7 @@ export async function postReq(url = "", data = {}, snackbarMethod) {
     credentials: "same-origin", // include, *same-origin, omit
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
     redirect: "follow", // manual, *follow, error
