@@ -13,7 +13,9 @@
       ></v-text-field>
     </v-col>
     <v-col cols="12">
-      <v-btn prepend-icon="mdi-plus">Add Items</v-btn>
+      <v-btn prepend-icon="mdi-plus" @click="searchDialog = true"
+        >Add Items</v-btn
+      >
     </v-col>
   </v-row>
   <v-row>
@@ -28,13 +30,15 @@
     </template>
   </v-row>
   <PantryItemDialog
-    v-model="dialog"
-    v-bind:dialogItem="dialogItem"
+    v-model="itemDialog"
+    v-bind:dialogItem="itemDialogItem"
   ></PantryItemDialog>
+  <AddToPantryDialog v-model="searchDialog"></AddToPantryDialog>
 </template>
 <script>
 import PantryCard from "@/components/PantryCard.vue";
 import PantryItemDialog from "@/components/pantrydialogs/PantryItemDialog.vue";
+import AddToPantryDialog from "@/components/pantrydialogs/AddToPantryDialog.vue";
 export default {
   name: "PantryView",
   data() {
@@ -79,8 +83,9 @@ export default {
       ],
       visiblePantryItems: [],
       searchValue: "",
-      dialog: false,
-      dialogItem: {},
+      itemDialog: false,
+      itemDialogItem: {},
+      searchDialog: false,
     };
   },
   methods: {
@@ -95,8 +100,8 @@ export default {
       );
     },
     showDialogWithItem(pantryItem) {
-      this.dialogItem = pantryItem;
-      this.dialog = true;
+      this.itemDialogItem = pantryItem;
+      this.itemDialog = true;
     },
   },
   mounted() {
@@ -105,6 +110,7 @@ export default {
   components: {
     PantryCard,
     PantryItemDialog,
+    AddToPantryDialog,
   },
 };
 </script>
