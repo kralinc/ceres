@@ -37,8 +37,8 @@
 </template>
 <script>
 import PantryCard from "@/components/PantryCard.vue";
-import PantryItemDialog from "@/components/pantrydialogs/PantryItemDialog.vue";
-import AddToPantryDialog from "@/components/pantrydialogs/AddToPantryDialog.vue";
+import PantryItemDialog from "@/components/pantry/PantryItemDialog.vue";
+import AddToPantryDialog from "@/components/pantry/AddToPantryDialog.vue";
 export default {
   name: "PantryView",
   data() {

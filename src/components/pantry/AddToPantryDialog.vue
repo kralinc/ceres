@@ -5,7 +5,7 @@
     persistent
     no-click-animation
     transition="dialog-bottom-transition"
-    :fullscreen="smAndDown"
+    fullscreen
   >
     <v-toolbar dark color="primary">
       <v-btn icon dark @click="$emit('update:modelValue', false)">
@@ -20,30 +20,40 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-card>
-      <v-row>
+      <v-row class="d-flex align-start">
         <v-col>
           <v-text-field
             v-model="searchValue"
             label="Search"
             prepend-inner-icon="mdi-magnify"
             @input="filterFoodItems"
-            @click="loadFoodItems"
           ></v-text-field>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col
-          cols="6"
-          v-for="foodItem of visibleFoodItems"
-          v-bind:key="foodItem.id"
-        >
-          <p>{{ foodItem.name }}</p>
+        <v-col>
+          <v-list lines="1">
+            <v-list-item
+              v-for="item in cart"
+              v-bind:key="item.id"
+              :title="item.name"
+              :subtitle="item.description"
+            >
+            </v-list-item>
+          </v-list>
         </v-col>
+        <template v-for="foodItem of visibleFoodItems" v-bind:key="foodItem.id">
+          <v-col cols="12" lg="6">
+            <FoodItemSearchCard
+              v-bind:item="foodItem"
+              @click="addFoodItemToCart(foodItem)"
+            ></FoodItemSearchCard>
+          </v-col>
+        </template>
       </v-row>
     </v-card>
   </v-dialog>
 </template>
 <script>
+import FoodItemSearchCard from "./FoodItemSearchCard.vue";
 import { useDisplay } from "vuetify";
 import { useMainStore } from "@/stores/MainStore";
 import { mapStores } from "pinia";
@@ -54,6 +64,9 @@ export default {
 
     return { smAndDown };
   },
+  async mounted() {
+    this.loadFoodItems();
+  },
   props: ["modelValue"],
   emits: ["update:modelValue"],
   data() {
@@ -62,11 +75,12 @@ export default {
       searchCounter: 0,
       foodItems: [],
       visibleFoodItems: [],
+      cart: {},
     };
   },
   methods: {
     async loadFoodItems() {
-      this.foodItems = await getReq(
+      this.visibleFoodItems = this.foodItems = await getReq(
         "v1/api/food",
         this.getFoodItemsFailedToast
       );
@@ -81,9 +95,15 @@ export default {
         "Something went wrong while fetching the food items."
       );
     },
+    addFoodItemToCart(foodItem) {
+      this.cart[foodItem.id] = foodItem;
+    },
   },
   computed: {
     ...mapStores(useMainStore),
+  },
+  components: {
+    FoodItemSearchCard,
   },
 };
 </script>
