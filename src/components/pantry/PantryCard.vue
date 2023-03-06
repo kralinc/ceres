@@ -10,7 +10,7 @@
       >
         <v-card-title
           class="text-white"
-          v-text="pantryItem.foodItem.description"
+          v-text="pantryItem.foodId.name"
         ></v-card-title>
       </v-img>
       <v-card-text>

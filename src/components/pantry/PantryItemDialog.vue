@@ -11,7 +11,7 @@
       <v-btn icon dark @click="$emit('update:modelValue', false)">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-      <v-toolbar-title>{{ dialogItem.foodItem.description }}</v-toolbar-title>
+      <v-toolbar-title>{{ dialogItem.foodId.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn variant="text" @click="$emit('update:modelValue', false)">

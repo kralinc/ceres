@@ -26,6 +26,7 @@
       <PantryCard
         v-bind:pantryItem="pantryItem"
         @click="showDialogWithItem(pantryItem)"
+        @updatePantry="updatePantry"
       ></PantryCard>
     </template>
   </v-row>
@@ -36,51 +37,15 @@
   <AddToPantryDialog v-model="searchDialog"></AddToPantryDialog>
 </template>
 <script>
-import PantryCard from "@/components/PantryCard.vue";
+import PantryCard from "@/components/pantry/PantryCard.vue";
 import PantryItemDialog from "@/components/pantry/PantryItemDialog.vue";
 import AddToPantryDialog from "@/components/pantry/AddToPantryDialog.vue";
+import { postReq } from "@/util/util";
 export default {
   name: "PantryView",
   data() {
     return {
-      pantryItems: [
-        {
-          id: 1,
-          foodItem: { id: 1, description: "Carrots", reusable: true },
-          quantity: 7,
-          unit: "Yuan Renminbi",
-        },
-        {
-          id: 2,
-          foodItem: { id: 2, description: "Beef", reusable: false },
-          quantity: 3,
-          unit: "Ruble",
-        },
-        {
-          id: 3,
-          foodItem: { id: 3, description: "Whey Protein", reusable: true },
-          quantity: 10,
-          unit: "Krona",
-        },
-        {
-          id: 4,
-          foodItem: { id: 4, description: "Tofu", reusable: true },
-          quantity: 5,
-          unit: "Euro",
-        },
-        {
-          id: 5,
-          foodItem: { id: 5, description: "Rice", reusable: true },
-          quantity: 4,
-          unit: "Naira",
-        },
-        {
-          id: 6,
-          foodItem: { id: 6, description: "Arsenic", reusable: false },
-          quantity: 4,
-          unit: "Ruble",
-        },
-      ],
+      pantryItems: [],
       visiblePantryItems: [],
       searchValue: "",
       itemDialog: false,
@@ -88,13 +53,18 @@ export default {
       searchDialog: false,
     };
   },
+  async mounted() {
+    this.pantryItems = await postReq("v1/api/inventory/getInventory", {}, null);
+    this.visiblePantryItems = this.pantryItems;
+  },
   methods: {
     onClear() {
-      console.log("sus");
+      this.searchValue = "";
+      this.filterPantry();
     },
     filterPantry() {
       this.visiblePantryItems = this.pantryItems.filter((item) =>
-        item.foodItem.description
+        item.foodId.description
           .toLowerCase()
           .includes(this.searchValue.toLowerCase())
       );
@@ -103,9 +73,9 @@ export default {
       this.itemDialogItem = pantryItem;
       this.itemDialog = true;
     },
-  },
-  mounted() {
-    this.visiblePantryItems = this.pantryItems;
+    updatePantry(pantry) {
+      this.visiblePantryItems = this.pantryItems = pantry;
+    },
   },
   components: {
     PantryCard,
