@@ -53,6 +53,7 @@ export default {
             // Make this more comprehensive and thorough
             if (response.status == "200") {
               localStorage.setItem("token", text);
+              this.mainStore.setSnackbar("Sucesfully logged in!", "green");
               this.mainStore.setLogin(true);
               this.$router.push("/");
             } else if (!response.ok) {

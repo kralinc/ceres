@@ -57,7 +57,7 @@ export default {
     };
   },
   async mounted() {
-    this.pantryItems = await postReq("v1/api/inventory/getInventory", {}, null);
+    this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
     this.visiblePantryItems = this.pantryItems;
   },
   methods: {

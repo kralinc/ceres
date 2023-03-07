@@ -1,3 +1,5 @@
+import { useMainStore } from "@/stores/MainStore";
+
 const TLD = "http://localhost:8080/";
 
 // = Parameters =
@@ -19,7 +21,8 @@ export function buildUrl(url) {
 // returns: json
 //
 // This method is a wrapper for the fetch API for basic get requests.
-export async function getReq(url, snackbarMethod) {
+export async function getReq(url, customText = {}) {
+  const mainStore = useMainStore();
   const token = localStorage.getItem("token");
   return await fetch(buildUrl(url), {
     method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -36,23 +39,30 @@ export async function getReq(url, snackbarMethod) {
   })
     .then((response) => {
       if (response.ok) {
+        if (customText[response.status]) {
+          mainStore.setSnackbar(customText[response.status], "green");
+        }
         return response.json();
-      } else if (response.status === 403) {
-        throw new Error("403 Not Authorized");
-      } else if (response.status === 404) {
-        throw new Error("404 Not Found");
       } else {
-        throw new Error("Something went wrong");
+        let errorText =
+          response.status === 403
+            ? "You're not authorized to perform this action"
+            : "Something went wrong!";
+        if (customText[response.status] || customText["err"]) {
+          errorText = customText[response.status];
+        }
+        mainStore.setSnackbar(errorText);
+        throw new Error(errorText);
       }
     })
     .catch((error) => {
       console.error(error);
-      snackbarMethod();
     });
 }
 
 // Example POST method implementation:
-export async function postReq(url = "", data = {}, snackbarMethod) {
+export async function postReq(url = "", data = {}, customText = {}) {
+  const mainStore = useMainStore();
   const token = localStorage.getItem("token");
   // Default options are marked with *
   const response = await fetch(buildUrl(url), {
@@ -71,16 +81,24 @@ export async function postReq(url = "", data = {}, snackbarMethod) {
   })
     .then((response) => {
       if (response.ok) {
+        if (customText[response.status]) {
+          mainStore.setSnackbar(customText[response.status], "green");
+        }
         return response.json();
-      } else if (response.status === 404) {
-        throw new Error("404 Not Found");
       } else {
-        throw new Error("Something went wrong");
+        let errorText =
+          response.status === 403
+            ? "You're not authorized to perform this action"
+            : "Something went wrong!";
+        if (customText[response.status] || customText["err"]) {
+          errorText = customText[response.status];
+        }
+        mainStore.setSnackbar(errorText);
+        throw new Error(errorText);
       }
     })
     .catch((error) => {
       console.error(error);
-      snackbarMethod();
     });
   return response; // parses JSON response into native JavaScript objects
 }
