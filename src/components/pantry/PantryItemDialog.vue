@@ -27,6 +27,13 @@
         <v-col cols="12" md="9">
           <v-text-field type="number"></v-text-field>
           <p>{{ dialogItem.unit }}</p>
+          <v-btn
+            variant="outlined"
+            prepend-icon="mdi-close"
+            color="error"
+            @click="removeItem"
+            >Remove</v-btn
+          >
         </v-col>
       </v-row>
     </v-card>
@@ -34,6 +41,7 @@
 </template>
 <script>
 import { useDisplay } from "vuetify";
+import { postReq } from "@/util/util";
 export default {
   setup() {
     const { smAndDown } = useDisplay();
@@ -41,6 +49,22 @@ export default {
     return { smAndDown };
   },
   props: ["modelValue", "dialogItem"],
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "updatePantry"],
+  methods: {
+    async removeItem() {
+      const updateInventory = {
+        foodId: this.dialogItem.foodId.id,
+        quantity: parseInt(this.dialogItem.quantity) * -1,
+        unit: "",
+      };
+      const pantry = await postReq(
+        "v1/api/inventory/updateInventory",
+        updateInventory,
+        null
+      );
+      this.$emit("updatePantry", pantry);
+      this.$emit("update:modelValue", false);
+    },
+  },
 };
 </script>

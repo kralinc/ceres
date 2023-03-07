@@ -18,7 +18,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-card>
-      <v-row class="d-flex align-start">
+      <v-row align-content="start">
         <v-col cols="12">
           <v-text-field
             v-model="searchValue"
@@ -44,7 +44,7 @@
           </v-table>
         </v-col>
         <template v-for="foodItem of visibleFoodItems" v-bind:key="foodItem.id">
-          <v-col cols="12" lg="6" class="d-inline">
+          <v-col cols="12" lg="6">
             <FoodItemSearchCard
               v-bind:item="foodItem"
               @click="addFoodItemToCart(foodItem)"
@@ -71,7 +71,7 @@ export default {
     this.loadFoodItems();
   },
   props: ["modelValue"],
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "updatePantry"],
   data() {
     return {
       searchValue: "",
@@ -110,7 +110,7 @@ export default {
       for (let itemId in this.cart) {
         const item = this.cart[itemId];
         let updateInventory = {
-          foodId: item.id,
+          foodId: item.foodId.id,
           quantity: item.quantity,
           unit: item.unit,
         };

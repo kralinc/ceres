@@ -26,15 +26,18 @@
       <PantryCard
         v-bind:pantryItem="pantryItem"
         @click="showDialogWithItem(pantryItem)"
-        @updatePantry="updatePantry"
       ></PantryCard>
     </template>
   </v-row>
   <PantryItemDialog
     v-model="itemDialog"
     v-bind:dialogItem="itemDialogItem"
+    @update-pantry="updatePantry"
   ></PantryItemDialog>
-  <AddToPantryDialog v-model="searchDialog"></AddToPantryDialog>
+  <AddToPantryDialog
+    v-model="searchDialog"
+    @update-pantry="updatePantry"
+  ></AddToPantryDialog>
 </template>
 <script>
 import PantryCard from "@/components/pantry/PantryCard.vue";
@@ -64,9 +67,7 @@ export default {
     },
     filterPantry() {
       this.visiblePantryItems = this.pantryItems.filter((item) =>
-        item.foodId.description
-          .toLowerCase()
-          .includes(this.searchValue.toLowerCase())
+        item.foodId.name.toLowerCase().includes(this.searchValue.toLowerCase())
       );
     },
     showDialogWithItem(pantryItem) {
