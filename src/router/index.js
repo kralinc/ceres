@@ -22,6 +22,9 @@ const routes = [
     path: "/login",
     name: "login",
     component: LoginView,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/recipe/:id",
@@ -33,6 +36,28 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth == true)) {
+    if (localStorage.getItem("token") == null) {
+      next({
+        name: "login",
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.requiresAuth == false)) {
+    if (localStorage.getItem("token") != null) {
+      next({
+        name: "home",
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

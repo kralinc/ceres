@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useMainStore = defineStore("main", {
   state: () => {
     return {
-      auth: true,
+      auth: false,
       snackbar: { active: false, color: "", message: "" },
     };
   },
