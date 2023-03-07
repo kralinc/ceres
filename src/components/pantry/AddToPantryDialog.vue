@@ -8,7 +8,7 @@
     fullscreen
   >
     <v-toolbar dark color="primary">
-      <v-btn icon dark @click="$emit('update:modelValue', false)">
+      <v-btn icon dark @click="closeDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-toolbar-title>Food Item Search</v-toolbar-title>
@@ -91,36 +91,43 @@ export default {
         item.name.toLowerCase().includes(this.searchValue)
       );
     },
-  },
-  addFoodItemToCart(foodItem) {
-    if (!this.cart[foodItem.id]) {
-      foodItem.unit = "cup";
-      foodItem.quantity = 1;
-      this.cart[foodItem.id] = foodItem;
-    }
-  },
-  async saveFoodItemsToPantry() {
-    let pantry = [];
-    for (let itemId in this.cart) {
-      const item = this.cart[itemId];
-      let updateInventory = {
-        foodId: item.foodId.id,
-        quantity: item.quantity,
-        unit: item.unit,
-      };
+    addFoodItemToCart(foodItem) {
+      if (!this.cart[foodItem.id]) {
+        foodItem.unit = "cup";
+        foodItem.quantity = 1;
+        this.cart[foodItem.id] = foodItem;
+      }
+    },
+    async saveFoodItemsToPantry() {
+      let pantry = [];
+      for (let itemId in this.cart) {
+        const item = this.cart[itemId];
+        let updateInventory = {
+          foodId: item.id,
+          quantity: item.quantity,
+          unit: item.unit,
+        };
 
-      pantry = await postReq(
-        "v1/api/inventory/updateInventory",
-        updateInventory,
-        {
-          200: "Succesfully updated pantry!",
-          err: "Could not update pantry.",
-          403: "You need to be logged in to update the pantry.",
-        }
-      );
-    }
-    this.$emit("updatePantry", pantry);
-    this.$emit("update:modelValue", false);
+        pantry = await postReq(
+          "v1/api/inventory/updateInventory",
+          updateInventory,
+          {
+            200: "Succesfully updated pantry!",
+            err: "Could not update pantry.",
+            403: "You need to be logged in to update the pantry.",
+          }
+        );
+      }
+
+      this.cart = {};
+
+      this.$emit("updatePantry", pantry);
+      this.$emit("update:modelValue", false);
+    },
+    closeDialog() {
+      this.cart = {};
+      this.$emit("update:modelValue", false);
+    },
   },
   components: {
     FoodItemSearchCard,

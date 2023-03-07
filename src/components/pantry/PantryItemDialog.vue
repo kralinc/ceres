@@ -61,7 +61,7 @@ export default {
         "v1/api/inventory/updateInventory",
         updateInventory,
         {
-          200: "Succesfully updated pantry!",
+          200: "Succesfully removed item!",
           err: "Could not update pantry.",
           403: "You need to be logged in to update the pantry.",
         }
