@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
 import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
 import { postReq } from "@/util/util.js";
 
@@ -91,6 +93,9 @@ export default {
       await this.fetchRecipes(this.searchCounter, this.searchValue, this.page);
       window.scrollTo(0, 0);
     },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
   components: { RecipeSearchResults },
 };
