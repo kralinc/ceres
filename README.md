@@ -47,5 +47,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Development Tips
 
+### Contribution
+Make new branches off of main. Coordinate with the team and check the trello board to decide what to work on next. Make sure there are no breaking changes in your branch before merging back to main.
+
 ### Using util.js
 util.js contains global stateless helper methods. Be sure to look there when handling stateless logic, and add to it if you anticipate using something multiple times.

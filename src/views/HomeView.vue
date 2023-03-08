@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
-import { postReq } from "@/util/util.js";
 import { useMainStore } from "@/stores/MainStore";
 import { mapStores } from "pinia";
+import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
+import { postReq } from "@/util/util.js";
 
 export default {
   name: "HomeView",
@@ -52,9 +52,6 @@ export default {
       numPages: 1,
       pageSize: 10,
     };
-  },
-  computed: {
-    ...mapStores(useMainStore),
   },
   methods: {
     onClear() {
@@ -83,7 +80,7 @@ export default {
         const recipeResponse = await postReq(
           "v1/api/recipes/queryRecipes",
           data,
-          this.showFailedRecipeSearchError
+          { err: "There was an error while performing your search." }
         );
         this.recipes = recipeResponse.results;
         this.numPages = recipeResponse.count;
@@ -96,11 +93,9 @@ export default {
       await this.fetchRecipes(this.searchCounter, this.searchValue, this.page);
       window.scrollTo(0, 0);
     },
-    showFailedRecipeSearchError() {
-      this.mainStore.setSnackbar(
-        "There was an error while performing your search."
-      );
-    },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
   components: { RecipeSearchResults },
   //  mounted() {
