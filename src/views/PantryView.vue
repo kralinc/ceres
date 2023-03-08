@@ -31,7 +31,7 @@
   </v-row>
   <PantryItemDialog
     v-model="itemDialog"
-    v-bind:dialogItem="itemDialogItem"
+    :dialogItem="itemDialogItem"
     @update-pantry="updatePantry"
   ></PantryItemDialog>
   <AddToPantryDialog

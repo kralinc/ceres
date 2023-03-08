@@ -48,8 +48,10 @@ export async function getReq(url, customText = {}) {
           response.status === 403
             ? "You're not authorized to perform this action"
             : "Something went wrong!";
-        if (customText[response.status] || customText["err"]) {
+        if (customText[response.status]) {
           errorText = customText[response.status];
+        } else if (customText["err"]) {
+          errorText = customText["err"];
         }
         mainStore.setSnackbar(errorText);
         throw new Error(errorText);
@@ -90,8 +92,10 @@ export async function postReq(url = "", data = {}, customText = {}) {
           response.status === 403
             ? "You're not authorized to perform this action"
             : "Something went wrong!";
-        if (customText[response.status] || customText["err"]) {
+        if (customText[response.status]) {
           errorText = customText[response.status];
+        } else if (customText["err"]) {
+          errorText = customText["err"];
         }
         mainStore.setSnackbar(errorText);
         throw new Error(errorText);
