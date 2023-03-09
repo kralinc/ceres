@@ -13,19 +13,27 @@
   <v-row>
     <v-col cols="4">
       <v-card>
-        <v-img
-          cover
-          :src="recipe.image ? recipe.image : 'https://placekitten.com/200/200'"
-        >
-        </v-img>
-        <v-card-actions>
+        <div>
+          <v-img
+            cover
+            :src="
+              recipe.image ? recipe.image : 'https://placekitten.com/200/200'
+            "
+          >
+          </v-img>
+        </div>
+        <div class="mt-5">
           <v-row>
-            <v-col cols="4">
-              <v-text class="text-h5">
-                Rate this Recipe ({{ reviewCount }})
-              </v-text>
+            <v-col cols="6">
+              <v-text> Cook Time: {{ recipe.cookTime }} </v-text>
             </v-col>
-            <v-col col="8">
+            <v-col cols="6">
+              <v-btn> Rate this Recipe ({{ reviewCount }}) </v-btn>
+            </v-col>
+          </v-row>
+          <v-divider class="mt-5"></v-divider>
+          <v-row>
+            <v-col>
               <v-rating
                 readonly
                 size="x-large"
@@ -35,7 +43,7 @@
               ></v-rating>
             </v-col>
           </v-row>
-        </v-card-actions>
+        </div>
       </v-card>
     </v-col>
     <v-col cols="8">
@@ -71,6 +79,10 @@
         </v-col>
       </v-row>
     </v-col>
+  </v-row>
+  <v-divider></v-divider>
+  <v-row>
+    <v-col> Reviews </v-col>
   </v-row>
 </template>
 
