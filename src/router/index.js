@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import RecipeView from "../views/RecipeView.vue";
 import PantryView from "../views/PantryView.vue";
+import { useMainStore } from "@/stores/MainStore";
 
 const routes = [
   {
@@ -45,16 +46,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const mainStore = useMainStore();
   if (to.matched.some((record) => record.meta.requiresAuth == true)) {
     if (localStorage.getItem("token") == null) {
+      mainStore.setLogin(false);
       next({
         name: "login",
       });
     } else {
+      mainStore.setLogin(true);
       next();
     }
   } else if (to.matched.some((record) => record.meta.requiresAuth == false)) {
     if (localStorage.getItem("token") != null) {
+      mainStore.setLogin(true);
       next({
         name: "home",
       });
