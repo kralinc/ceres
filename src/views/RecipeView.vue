@@ -1,6 +1,6 @@
 <template>
-  <div>Recipe Object: {{ recipe }}</div>
-  <div>Recipe Items: {{ itemsList }}</div>
+  <!-- <div>Recipe Object: {{ recipe }}</div>
+  <div>Recipe Items: {{ itemsList }}</div> -->
   <v-row>
     <v-col>
       <v-card>
@@ -47,14 +47,6 @@
       </v-card>
     </v-col>
     <v-col cols="8">
-      <!-- <v-card>
-        <v-card-title class="text-h4">Recipe</v-card-title>
-        <v-card-text>{{ recipe.description }}</v-card-text>
-        <v-divider></v-divider>
-        <v-card-text>
-          <p class="text-h4">Ingredients</p>
-        </v-card-text>
-      </v-card> -->
       <v-row>
         <v-col>{{ recipe.description }}</v-col>
         <v-divider></v-divider>
@@ -80,7 +72,7 @@
       </v-row>
     </v-col>
   </v-row>
-  <v-divider></v-divider>
+  <v-divider class="ma-5"></v-divider>
   <v-row>
     <v-col> Reviews </v-col>
   </v-row>
