@@ -1,3 +1,5 @@
+import { useMainStore } from "@/stores/MainStore";
+
 const TLD = "http://localhost:8080/";
 
 // = Parameters =
@@ -19,28 +21,51 @@ export function buildUrl(url) {
 // returns: json
 //
 // This method is a wrapper for the fetch API for basic get requests.
-export async function getReq(url, snackbarMethod) {
-  return await fetch(buildUrl(url))
+export async function getReq(url, customText = {}) {
+  const mainStore = useMainStore();
+  const token = localStorage.getItem("token");
+  return await fetch(buildUrl(url), {
+    method: "GET", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+  })
     .then((response) => {
       if (response.ok) {
+        if (customText[response.status]) {
+          mainStore.setSnackbar(customText[response.status], "green");
+        }
         return response.json();
-      } else if (response.status === 403) {
-        throw new Error("403 Not Authorized");
-      } else if (response.status === 404) {
-        throw new Error("404 Not Found");
       } else {
-        throw new Error("Something went wrong");
+        let errorText =
+          response.status === 403
+            ? "You're not authorized to perform this action"
+            : "Something went wrong!";
+        if (customText[response.status]) {
+          errorText = customText[response.status];
+        } else if (customText["err"]) {
+          errorText = customText["err"];
+        }
+        mainStore.setSnackbar(errorText);
+        throw new Error(errorText);
       }
     })
-    .then((data) => data)
     .catch((error) => {
       console.error(error);
-      snackbarMethod();
     });
 }
 
 // Example POST method implementation:
-export async function postReq(url = "", data = {}, snackbarMethod) {
+export async function postReq(url = "", data = {}, customText = {}) {
+  const mainStore = useMainStore();
+  const token = localStorage.getItem("token");
   // Default options are marked with *
   const response = await fetch(buildUrl(url), {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -49,6 +74,7 @@ export async function postReq(url = "", data = {}, snackbarMethod) {
     credentials: "same-origin", // include, *same-origin, omit
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
     redirect: "follow", // manual, *follow, error
@@ -57,16 +83,26 @@ export async function postReq(url = "", data = {}, snackbarMethod) {
   })
     .then((response) => {
       if (response.ok) {
+        if (customText[response.status]) {
+          mainStore.setSnackbar(customText[response.status], "green");
+        }
         return response.json();
-      } else if (response.status === 404) {
-        throw new Error("404 Not Found");
       } else {
-        throw new Error("Something went wrong");
+        let errorText =
+          response.status === 403
+            ? "You're not authorized to perform this action"
+            : "Something went wrong!";
+        if (customText[response.status]) {
+          errorText = customText[response.status];
+        } else if (customText["err"]) {
+          errorText = customText["err"];
+        }
+        mainStore.setSnackbar(errorText);
+        throw new Error(errorText);
       }
     })
     .catch((error) => {
       console.error(error);
-      snackbarMethod();
     });
   return response; // parses JSON response into native JavaScript objects
 }
