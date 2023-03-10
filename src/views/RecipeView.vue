@@ -2,16 +2,14 @@
   <!-- <div>Recipe Object: {{ recipe }}</div>
   <div>Recipe Items: {{ itemsList }}</div> -->
   <v-row>
-    <v-col>
+    <v-col cols="12">
       <v-card>
-        <v-card-title>
-          <h1 class="text-h1 py-5">{{ recipe.name }}</h1>
-        </v-card-title>
+        <h1 class="text-h1 py-5">{{ recipe.name }}</h1>
       </v-card>
     </v-col>
   </v-row>
   <v-row>
-    <v-col cols="4">
+    <v-col sm="12" lg="5">
       <v-card>
         <div>
           <v-img
@@ -24,10 +22,10 @@
         </div>
         <div class="mt-5">
           <v-row>
-            <v-col cols="6">
+            <v-col sm="12" lg="6">
               <v-text> Cook Time: {{ recipe.cookTime }} </v-text>
             </v-col>
-            <v-col cols="6">
+            <v-col sm="12" lg="6">
               <v-btn> Rate this Recipe ({{ reviewCount }}) </v-btn>
             </v-col>
           </v-row>
@@ -46,7 +44,7 @@
         </div>
       </v-card>
     </v-col>
-    <v-col cols="8">
+    <v-col sm="12" lg="7">
       <v-row>
         <v-col>{{ recipe.description }}</v-col>
         <v-divider></v-divider>
@@ -106,24 +104,26 @@ export default {
     async loadRecipe(id) {
       this.recipe = await getReq(
         "v1/api/recipes/getRecipe?id=" + id,
-        this.showLoadRecipeError
+        { err: "There was a problem loading the recipe!" }
+        // this.showLoadRecipeError
       );
     },
     async loadRecipeItems(id) {
       this.itemsList = await getReq(
         "v1/api/recipes/getRecipeItems?id=" + id,
-        this.showLoadRecipeItemsError
+        { err: "There was a problem loading the recipe items!" }
+        // this.showLoadRecipeItemsError
       );
     },
 
-    showLoadRecipeError() {
-      this.mainStore.setSnackbar("There was a problem loading the recipe!");
-    },
-    showLoadRecipeItemsError() {
-      this.mainStore.setSnackbar(
-        "There was a problem loading the recipe items!"
-      );
-    },
+    // showLoadRecipeError() {
+    //   this.mainStore.setSnackbar("There was a problem loading the recipe!");
+    // },
+    // showLoadRecipeItemsError() {
+    //   this.mainStore.setSnackbar(
+    //     "There was a problem loading the recipe items!"
+    //   );
+    // },
   },
 };
 </script>
