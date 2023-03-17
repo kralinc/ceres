@@ -1,7 +1,7 @@
 <template>
   <v-card class="pa-5">
     <v-card-title class="text-h6 text-md-h5 text-lg-h4">Sign Up</v-card-title>
-    <v-form @submit.prevent="submit">
+    <v-form ref="form">
       <v-container>
         <v-row>
           <v-col
@@ -9,7 +9,6 @@
               v-model="user.firstName"
               class="mx-3 my-1"
               label="First Name"
-              required
             ></v-text-field
           ></v-col>
           <v-col
@@ -17,7 +16,6 @@
               v-model="user.lastName"
               class="mx-3 my-1"
               label="Last Name"
-              required
             ></v-text-field
           ></v-col>
         </v-row>
@@ -25,6 +23,7 @@
           v-model="user.username"
           class="mx-3 my-1"
           label="Username"
+          :rules="usernameRules"
           required
         ></v-text-field>
 
@@ -40,9 +39,10 @@
           v-model="user.password"
           :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPass ? 'text' : 'password'"
-          name="input-10-1"
           label="Create Password"
+          :rules="passwordRules"
           @click:append-inner="showPass = !showPass"
+          required
           class="mx-3 my-1"
         ></v-text-field>
 
@@ -50,16 +50,14 @@
           v-model="user.passwordConfirm"
           :append-inner-icon="showPassConfirm ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassConfirm ? 'text' : 'password'"
-          name="input-10-1"
           label="Reenter Password"
           @click:append-inner="showPassConfirm = !showPassConfirm"
+          :rules="confirmPasswordRules"
+          required
           class="mx-3 my-1"
         ></v-text-field>
 
-        <v-btn block class="mx-auto mt-3" @click="submitSignUp">Sign Up</v-btn>
-        <div class="my-3">
-          <a class="font-italic" href="url">Forgot your password?</a>
-        </div>
+        <v-btn block class="mx-auto mt-3" @click="validate">Sign Up</v-btn>
       </v-container>
     </v-form>
   </v-card>
@@ -84,7 +82,23 @@ export default {
       },
       emailRules: [
         (v) => !!v || "E-mail is required",
-        (v) => /.+@.+..+/.test(v) || "E-mail must be valid",
+        (v) =>
+          /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{3}$/.test(v) || "E-mail must be valid",
+      ],
+      passwordRules: [
+        (v) => !!v || "Password is required",
+        (v) =>
+          /^(?=.*[A-Z])(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d$&+,:;=?@#|'<>.^*()%!-]{8,25}$/.test(
+            v
+          ) || "Password must be valid",
+      ],
+      confirmPasswordRules: [
+        (v) => !!v || "Confirming the password is required",
+        (v) => this.user.password == v || "Input must match the password",
+      ],
+      usernameRules: [
+        (v) => !!v || "Username is required",
+        (v) => /^[^1-9].{4,25}$/.test(v) || "Username must be valid",
       ],
     };
   },
@@ -111,12 +125,19 @@ export default {
                 "Successfully created an account!",
                 "green"
               );
+              this.$router.push("/login");
             } else if (!response.ok) {
               throw new Error(text);
             }
           })
         )
         .catch((e) => this.mainStore.setSnackbar(e, "red-darken-3"));
+    },
+    async validate() {
+      let results = await this.$refs.form.validate();
+      if (results.valid) {
+        this.submitSignUp();
+      }
     },
   },
   computed: {
