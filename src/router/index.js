@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
+import LoginView from "../views/authenticationform/LoginView.vue";
+import SignUpView from "../views/authenticationform/SignUpView.vue";
+import ForgotPassView from "../views/authenticationform/ForgotPassView.vue";
+import ChangePassView from "../views/authenticationform/ChangePassView.vue";
 import RecipeView from "../views/RecipeView.vue";
 import PantryView from "../views/PantryView.vue";
 import { useMainStore } from "@/stores/MainStore";
@@ -24,6 +27,30 @@ const routes = [
     path: "/login",
     name: "login",
     component: LoginView,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/signUp",
+    name: "signUp",
+    component: SignUpView,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/forgotPassword",
+    name: "forgotPassword",
+    component: ForgotPassView,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/changePassword",
+    name: "changePassword",
+    component: ChangePassView,
     meta: {
       requiresAuth: false,
     },

@@ -20,6 +20,17 @@
       ></v-text-field>
 
       <v-btn block class="mx-auto mt-3" @click="submitLogin">Login</v-btn>
+
+      <div class="my-3">
+        <router-link to="/forgotPassword" class="router-link">
+          Forgot your password?
+        </router-link>
+      </div>
+      <div class="my-3">
+        <router-link to="/signUp" class="router-link">
+          A new user? Sign Up Here!
+        </router-link>
+      </div>
     </v-form>
   </v-card>
 </template>
@@ -53,7 +64,7 @@ export default {
             // Make this more comprehensive and thorough
             if (response.status == "200") {
               localStorage.setItem("token", text);
-              this.mainStore.setSnackbar("Sucesfully logged in!", "green");
+              this.mainStore.setSnackbar("Successfully logged in!", "green");
               this.mainStore.setLogin(true);
               this.$router.push("/");
             } else if (!response.ok) {

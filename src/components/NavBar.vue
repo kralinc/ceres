@@ -30,6 +30,13 @@
       <router-link to="/login" class="router-link" v-if="!mainStore.isLoggedIn">
         <v-list-item prepend-icon="mdi-login">Login</v-list-item>
       </router-link>
+      <router-link
+        to="/signUp"
+        class="router-link"
+        v-if="!mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-login">Sign Up</v-list-item>
+      </router-link>
       <router-link to="/pantry" class="router-link" v-if="mainStore.isLoggedIn">
         <v-list-item prepend-icon="mdi-book">Pantry</v-list-item>
       </router-link>

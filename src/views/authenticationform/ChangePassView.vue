@@ -1,6 +1,5 @@
 <script setup>
-import LoginForm from "@/components/userloginforms/LoginForm.vue";
-import SignUpForm from "@/components/userloginforms/SignUpForm.vue";
+import ChangePassForm from "@/components/userloginforms/ChangePassForm.vue";
 import { useMainStore } from "@/stores/MainStore";
 import { mapStores } from "pinia";
 </script>
@@ -8,21 +7,20 @@ import { mapStores } from "pinia";
 <template>
   <v-row justify="center" no-gutters>
     <v-col lg="7">
-      <LoginForm class="ma-5"></LoginForm>
-      <SignUpForm class="ma-5"></SignUpForm>
+      <ChangePassForm class="ma-5"></ChangePassForm>
     </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
-  name: "LoginView",
+  name: "ChangePassView",
   methods: {
     onClear() {
       alert("Oops");
     },
   },
-  components: { LoginForm, SignUpForm },
+  components: { ChangePassForm },
   computed: {
     ...mapStores(useMainStore),
   },

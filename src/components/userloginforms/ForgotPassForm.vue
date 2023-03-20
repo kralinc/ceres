@@ -3,29 +3,69 @@
     <v-card-title class="text-h6 text-md-h5 text-lg-h4"
       >Account's Email Address</v-card-title
     >
-    <v-form class="my-8" @submit.prevent="submit">
+    <v-form ref="form" class="my-8">
       <v-text-field
+        v-model="email"
         class="mx-3 my-1"
-        label="Email Address or Username"
+        label="Enter an Email Address"
+        :rules="emailRules"
         required
       ></v-text-field>
 
-      <v-btn block class="mx-auto mt-3" @click="submitLogin"
-        >Reset Password</v-btn
-      >
+      <v-btn block class="mx-auto mt-3" @click="validate">Reset Password</v-btn>
     </v-form>
   </v-card>
 </template>
 
 <script>
-//import { mapStores } from "pinia";
-//import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
 
 export default {
   data() {
     return {
-      showPassReset: true,
+      email: "",
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) =>
+          /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{3}$/.test(v) || "E-mail must be valid",
+      ],
     };
+  },
+  methods: {
+    submitPassReset() {
+      fetch("http://localhost:8080/v1/api/auth/resetPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: this.email,
+      })
+        .then((response) =>
+          response.text().then((text) => {
+            // Make this more comprehensive and thorough
+            if (response.status == "201") {
+              this.mainStore.setSnackbar(
+                "Email successfully send if the user exists!",
+                "green"
+              );
+              this.$router.push("/home");
+            } else if (!response.ok) {
+              throw new Error(text);
+            }
+          })
+        )
+        .catch((e) => this.mainStore.setSnackbar(e, "red-darken-3"));
+    },
+    async validate() {
+      let results = await this.$refs.form.validate();
+      if (results.valid) {
+        this.submitPassReset();
+      }
+    },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>
