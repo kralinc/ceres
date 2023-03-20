@@ -19,7 +19,6 @@
           <v-card-title>{{ recipe.name }}</v-card-title>
           {{ description }}
           <v-spacer></v-spacer>
-          <p>Cook time: {{ recipe.cookTime }} min.</p>
           <v-rating
             readonly
             density="compact"
