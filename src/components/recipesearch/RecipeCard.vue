@@ -22,8 +22,9 @@
           <v-rating
             readonly
             density="compact"
-            v-model="recipe.rating"
+            v-model="recipe.avgRating"
           ></v-rating>
+          <p>({{ recipe.reviewCount }})</p>
         </v-col>
       </v-row>
     </v-card>
@@ -35,7 +36,11 @@
     <v-card variant="tonal" class="recipe-card text-truncate">
       <v-card-title>{{ recipe.name }}</v-card-title>
       {{ description }}
-      <v-rating readonly density="compact" v-model="recipe.rating"></v-rating>
+      <v-rating
+        readonly
+        density="compact"
+        v-model="recipe.avgRating"
+      ></v-rating>
     </v-card>
   </v-col>
 </template>
