@@ -72,7 +72,38 @@
   </v-row>
   <v-divider class="ma-5"></v-divider>
   <v-row>
-    <v-col> Reviews </v-col>
+    <v-col lg="12"> Reviews </v-col>
+  </v-row>
+  <v-row>
+    <v-col lg="5">
+      <v-card>
+        <v-row>
+          <v-col lg="12" class="mt-3">
+            <strong>{{ recipe.name }} Reviews </strong></v-col
+          >
+          <v-divider></v-divider>
+          <v-col
+            ><v-rating
+              readonly
+              size="x-large"
+              v-model="recipe.rating"
+              color="black"
+              active-color="yellow-accent-4"
+            ></v-rating
+          ></v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+    <v-col lg="7" v-for="review in reviews" :key="review.id">
+      <v-card>
+        <div>
+          {{ review.user.username }}
+          <v-card>
+            {{ review.review }}
+          </v-card>
+        </div>
+      </v-card>
+    </v-col>
   </v-row>
 </template>
 
@@ -86,12 +117,14 @@ export default {
   mounted() {
     this.loadRecipe(this.$route.params.id);
     this.loadRecipeItems(this.$route.params.id);
+    // this.loadReviews(this.$route.params.id);
   },
   data() {
     return {
       recipeId: -1,
       recipe: Object,
       itemsList: [],
+      reviews: [],
     };
   },
   computed: {
@@ -114,6 +147,11 @@ export default {
         { err: "There was a problem loading the recipe items!" }
         // this.showLoadRecipeItemsError
       );
+    },
+    async loadReviews(id) {
+      this.reviews = await getReq("v1/api/recipes/getRecipeReviews?id=" + id, {
+        err: "There was a problem loading reviews!",
+      });
     },
 
     // showLoadRecipeError() {
