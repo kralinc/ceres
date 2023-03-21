@@ -6,6 +6,7 @@ import ForgotPassView from "../views/authenticationform/ForgotPassView.vue";
 import ChangePassView from "../views/authenticationform/ChangePassView.vue";
 import RecipeView from "../views/RecipeView.vue";
 import PantryView from "../views/PantryView.vue";
+import PantryRecipeSearchView from "../views/PantryRecipeSearchView.vue";
 import { useMainStore } from "@/stores/MainStore";
 
 const routes = [
@@ -64,6 +65,17 @@ const routes = [
     path: "/pantry",
     name: "pantry",
     component: PantryView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/pantryRecipeSearch",
+    name: "pantryRecipeSearch",
+    component: PantryRecipeSearchView,
+    meta: {
+      requiresAuth: true,
+    },
   },
 ];
 
