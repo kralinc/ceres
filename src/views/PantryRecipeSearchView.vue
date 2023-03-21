@@ -8,10 +8,12 @@
         clearable
         variant="solo"
         @click:clear="onClear"
-        @input="filterRecipesEvent"
+        @input="filterRecipes"
         v-model="searchValue"
       ></v-text-field>
-      <RecipeSearchResults v-bind:recipes="recipes"></RecipeSearchResults>
+      <RecipeSearchResults
+        v-bind:recipes="visibleRecipes"
+      ></RecipeSearchResults>
       <v-row>
         <v-col cols="10">
           <v-pagination
@@ -42,28 +44,47 @@ export default {
   data() {
     return {
       recipes: [],
+      filteredRecipes: [],
+      visibleRecipes: [],
       searchValue: "",
       numPages: 0,
       pageSize: 10,
-      page: 0,
+      page: 1,
     };
   },
   methods: {
     onClear() {
-      return;
+      this.searchValue = "";
+      this.filterRecipes();
     },
-    filterRecipesEvent() {
-      return;
+    filterRecipes() {
+      this.filteredRecipes = this.recipes.filter(
+        (x) =>
+          x.name.includes(this.searchValue) ||
+          x.description.includes(this.searchValue)
+      );
+      this.doPagination();
+    },
+    doPagination() {
+      this.numPages = Math.ceil(this.filteredRecipes.length / this.pageSize);
+      this.visibleRecipes = this.filteredRecipes.slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
+      if (this.page > this.numPages) {
+        this.page = this.numPages;
+      }
     },
     async fetchPantryRecipes() {
-      this.recipes = await postReq(
+      this.filteredRecipes = this.recipes = await postReq(
         "v1/api/recipes/recipeWithInventory",
-        { pageNumber: this.page, pageSize: this.pageSize },
+        { pageNumber: 0, pageSize: 99999 },
         { err: "There was a problem while fetching the recipes!" }
       );
+      this.doPagination();
     },
     async changePage() {
-      this.fetchPantryRecipes();
+      this.doPagination();
     },
   },
   mounted() {
