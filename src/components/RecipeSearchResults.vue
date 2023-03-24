@@ -1,5 +1,5 @@
 <script setup>
-import RecipeCard from "./recipecards/RecipeCard.vue";
+import RecipeCard from "./recipesearch/RecipeCard.vue";
 </script>
 
 <template>

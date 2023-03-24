@@ -40,6 +40,15 @@
       <router-link to="/pantry" class="router-link" v-if="mainStore.isLoggedIn">
         <v-list-item prepend-icon="mdi-book">Pantry</v-list-item>
       </router-link>
+      <router-link
+        to="/pantryRecipeSearch"
+        class="router-link"
+        v-if="mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-book-search"
+          >Pantry Recipe Search</v-list-item
+        >
+      </router-link>
       <v-list-item
         @click="LogOff()"
         prepend-icon="mdi-logout"

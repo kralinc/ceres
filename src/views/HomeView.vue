@@ -98,10 +98,5 @@ export default {
     ...mapStores(useMainStore),
   },
   components: { RecipeSearchResults },
-  //  mounted() {
-  //    if (this.message != false) {
-  //      this.mainStore.setSnackbar(this.message, "red-darken-3");
-  //    }
-  //  },
 };
 </script>
