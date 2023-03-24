@@ -23,6 +23,7 @@
           v-model="user.username"
           class="mx-3 my-1"
           label="Username"
+          hint="Username must be between 4 and 25 characters. It can't start with a digit."
           :rules="usernameRules"
           required
         ></v-text-field>
@@ -40,6 +41,7 @@
           :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPass ? 'text' : 'password'"
           label="Create Password"
+          hint="Password must be between 8 and 25 characters. Must contain a special character and uppercase letter."
           :rules="passwordRules"
           @click:append-inner="showPass = !showPass"
           required
@@ -83,7 +85,9 @@ export default {
       emailRules: [
         (v) => !!v || "E-mail is required",
         (v) =>
-          /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{3}$/.test(v) || "E-mail must be valid",
+          /^(?=.{1,64}@)[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$/.test(
+            v
+          ) || "E-mail must be valid",
       ],
       passwordRules: [
         (v) => !!v || "Password is required",
