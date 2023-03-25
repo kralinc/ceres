@@ -86,7 +86,7 @@ export default {
         this.recipes = recipeResponse.results;
         this.numPages = recipeResponse.count;
         if (this.recipes.length === 0) {
-          this.this.mainStore.setSnackbar("Search returned no results.");
+          this.mainStore.setSnackbar("Search returned no results.");
         }
         this.saveValuesToStore();
       }
