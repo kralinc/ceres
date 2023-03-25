@@ -56,6 +56,7 @@ export default {
   methods: {
     onClear() {
       this.fetchRecipesEvent({ target: { value: "" } });
+      this.mainStore.recipeSearchValues = {};
     },
     async fetchRecipesEvent() {
       this.searchCounter++;
@@ -85,14 +86,32 @@ export default {
         this.recipes = recipeResponse.results;
         this.numPages = recipeResponse.count;
         if (this.recipes.length === 0) {
-          this.mainStore.setSnackbar("Search returned no results.");
+          this.this.mainStore.setSnackbar("Search returned no results.");
         }
+        this.saveValuesToStore();
       }
     },
     async changePage() {
       await this.fetchRecipes(this.searchCounter, this.searchValue, this.page);
+      this.saveValuesToStore();
       window.scrollTo(0, 0);
     },
+    saveValuesToStore() {
+      this.mainStore.recipeSearchValues.searchValue = this.searchValue;
+      this.mainStore.recipeSearchValues.recipes = this.recipes;
+      this.mainStore.recipeSearchValues.numPages = this.numPages;
+      this.mainStore.recipeSearchValues.page = this.page;
+      this.mainStore.recipeSearchValues.pageSize = this.pageSize;
+    },
+  },
+  mounted() {
+    if (Object.keys(this.mainStore.recipeSearchValues).length !== 0) {
+      this.searchValue = this.mainStore.recipeSearchValues.searchValue;
+      this.recipes = this.mainStore.recipeSearchValues.recipes;
+      this.numPages = this.mainStore.recipeSearchValues.numPages;
+      this.page = this.mainStore.recipeSearchValues.page;
+      this.pageSize = this.mainStore.recipeSearchValues.pageSize;
+    }
   },
   computed: {
     ...mapStores(useMainStore),

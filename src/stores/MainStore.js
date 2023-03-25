@@ -5,6 +5,8 @@ export const useMainStore = defineStore("main", {
     return {
       auth: false,
       snackbar: { active: false, color: "", message: "" },
+      recipeSearchValues: {},
+      pantrySearchValues: {},
     };
   },
   actions: {
@@ -16,6 +18,9 @@ export const useMainStore = defineStore("main", {
     setLogin(isLoggedIn) {
       console.log("I GOT IT");
       this.auth = isLoggedIn;
+    },
+    erasePantrySearchValues() {
+      this.pantrySearchValues = {};
     },
   },
   getters: {
