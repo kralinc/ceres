@@ -59,6 +59,7 @@
 import FoodItemSearchCard from "./FoodItemSearchCard.vue";
 import { useDisplay } from "vuetify";
 import { getReq, postReq } from "@/util/util";
+import { eraseCachedPantryRecipes } from "@/util/util";
 
 export default {
   setup() {
@@ -119,6 +120,7 @@ export default {
         );
       }
 
+      eraseCachedPantryRecipes();
       this.cart = {};
 
       this.$emit("updatePantry", pantry);

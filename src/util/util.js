@@ -85,3 +85,8 @@ async function fetchWrapper(url, requestBody, customText) {
       console.error(error);
     });
 }
+
+export function eraseCachedPantryRecipes() {
+  const mainStore = useMainStore();
+  mainStore.erasePantrySearchValues();
+}
