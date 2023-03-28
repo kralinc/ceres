@@ -1,6 +1,4 @@
 <template>
-  <!-- <div>Recipe Object: {{ recipe }}</div>
-  <div>Recipe Items: {{ itemsList }}</div> -->
   <v-row>
     <v-col cols="12">
       <v-card>
@@ -69,24 +67,6 @@
   <v-row>
     <v-col lg="4">
       <v-card>
-        <!-- <v-row class="mt-3">
-          <v-col sm="12" lg="6" class="mt-3">
-            <strong> Customer Reviews </strong></v-col
-          >
-          <v-col sm="12" lg="6" class="mb-3">
-            <v-btn> Rate this Recipe ({{ reviewCount }}) </v-btn>
-          </v-col>
-          <v-divider></v-divider>
-          <v-col
-            ><v-rating
-              readonly
-              size="x-large"
-              v-model="recipe.rating"
-              color="black"
-              active-color="yellow-accent-4"
-            ></v-rating
-          ></v-col>
-        </v-row> -->
         <v-card-title>
           <div>
             <v-row no-gutters>
@@ -304,18 +284,14 @@ export default {
   },
   methods: {
     async loadRecipe(id) {
-      this.recipe = await getReq(
-        "v1/api/recipes/getRecipe?id=" + id,
-        { err: "There was a problem loading the recipe!" }
-        // this.showLoadRecipeError
-      );
+      this.recipe = await getReq("v1/api/recipes/getRecipe?id=" + id, {
+        err: "There was a problem loading the recipe!",
+      });
     },
     async loadRecipeItems(id) {
-      this.itemsList = await getReq(
-        "v1/api/recipes/getRecipeItems?id=" + id,
-        { err: "There was a problem loading the recipe items!" }
-        // this.showLoadRecipeItemsError
-      );
+      this.itemsList = await getReq("v1/api/recipes/getRecipeItems?id=" + id, {
+        err: "There was a problem loading the recipe items!",
+      });
     },
     async loadReviews(id) {
       this.reviews = await getReq("v1/api/recipes/getRecipeReviews?id=" + id, {
@@ -340,15 +316,6 @@ export default {
         console.log(pantry);
       }
     },
-
-    // showLoadRecipeError() {
-    //   this.mainStore.setSnackbar("There was a problem loading the recipe!");
-    // },
-    // showLoadRecipeItemsError() {
-    //   this.mainStore.setSnackbar(
-    //     "There was a problem loading the recipe items!"
-    //   );
-    // },
   },
 };
 </script>
