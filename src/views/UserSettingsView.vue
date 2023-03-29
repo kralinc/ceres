@@ -28,6 +28,11 @@
         v-model="userInfo.email"
       ></v-text-field>
     </v-col>
+    <v-col cols="12">
+      <v-btn prepend-icon="mdi-content-save" @click="updateUserInfo"
+        >Save</v-btn
+      >
+    </v-col>
     <v-divider></v-divider>
     <v-col cols="12">
       <h3>Allergies/Dislikes</h3>
@@ -104,6 +109,24 @@ export default {
       });
       delete this.dislikedIngredients[ingredient.id];
       this.allFoodItems.push(ingredient);
+    },
+    async updateUserInfo() {
+      const currentUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (this.userInfo.firstName !== currentUserInfo.firstName) {
+        await this.updateName(this.userInfo.firstName, "first", {
+          200: "Succesfully updated name!",
+        });
+      }
+      if (this.userInfo.lastName !== currentUserInfo.lastName) {
+        await this.updateName(this.userInfo.lastName, "last", {
+          200: "Succesfully updated name!",
+        });
+      }
+      localStorage.setItem("userInfo", JSON.stringify(this.userInfo));
+    },
+    async updateName(newName, nameIndicator) {
+      let nameObject = { newName: newName, nameIndicator: nameIndicator };
+      return await postReq("v1/api/user/updateName", nameObject);
     },
   },
   async mounted() {
