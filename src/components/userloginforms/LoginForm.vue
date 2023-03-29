@@ -54,12 +54,24 @@ export default {
         username: this.username,
         password: this.password,
       };
-      const token = await postReq("v1/api/auth/signin", body, {
+      const loginObject = await postReq("v1/api/auth/signin", body, {
         200: "Successfully logged in!",
         403: "Username or Password incorrect",
       });
-      if (token) {
-        localStorage.setItem("token", token);
+      if (loginObject) {
+        localStorage.setItem("token", loginObject.token);
+        localStorage.setItem(
+          "tokenTimestamp",
+          Date.now() + 1000 * 60 * 60 * 10
+        );
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify({
+            firstName: loginObject.firstName,
+            lastName: loginObject.lastName,
+            email: loginObject.email,
+          })
+        );
         this.mainStore.setLogin(true);
         this.$router.push("/");
       }
