@@ -87,6 +87,13 @@ export default {
       }
       this.selectedDislikedIngredients.forEach((ingredient) => {
         this.dislikedIngredients[ingredient.id] = ingredient;
+
+        for (let i = 0; i < this.allFoodItems.length; i++) {
+          if (this.allFoodItems[i].id === ingredient.id) {
+            this.allFoodItems.splice(i, 1);
+            break;
+          }
+        }
       });
       this.selectedDislikedIngredients = [];
     },
@@ -96,6 +103,7 @@ export default {
         err: "There was an error while setting your disliked ingredients",
       });
       delete this.dislikedIngredients[ingredient.id];
+      this.allFoodItems.push(ingredient);
     },
   },
   async mounted() {
