@@ -49,6 +49,13 @@
           >Pantry Recipe Search</v-list-item
         >
       </router-link>
+      <router-link
+        to="/settings"
+        class="router-link"
+        v-if="mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-cog">Settings</v-list-item>
+      </router-link>
       <v-list-item
         @click="LogOff()"
         prepend-icon="mdi-logout"
@@ -66,11 +73,6 @@ export default {
   data() {
     return {
       drawer: false,
-      routes: [
-        { to: "/", name: "Home" },
-        { to: "/about", name: "About" },
-        { to: "/login", name: "Login" },
-      ],
     };
   },
   methods: {
