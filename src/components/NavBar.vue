@@ -85,6 +85,8 @@ export default {
   methods: {
     LogOff() {
       localStorage.removeItem("token");
+      localStorage.removeItem("tokenTimestamp");
+      localStorage.removeItem("userInfo");
       this.mainStore.setLogin(false);
       this.mainStore.erasePantrySearchValues();
     },

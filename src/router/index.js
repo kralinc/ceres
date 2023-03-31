@@ -104,6 +104,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
+  const tokenTimestamp = localStorage.getItem("tokenTimestamp");
+
+  if (tokenTimestamp != null && tokenTimestamp <= Date.now()) {
+    mainStore.setLogin(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenTimestamp");
+    localStorage.removeItem("userInfo");
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth == true)) {
     if (localStorage.getItem("token") == null) {
       mainStore.setLogin(false);
