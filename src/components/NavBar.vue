@@ -50,6 +50,13 @@
         >
       </router-link>
       <router-link
+        to="/settings"
+        class="router-link"
+        v-if="mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-cog">Settings</v-list-item>
+      </router-link>
+      <router-link
         to="/myRecipes"
         class="router-link"
         v-if="mainStore.isLoggedIn"
@@ -73,11 +80,6 @@ export default {
   data() {
     return {
       drawer: false,
-      routes: [
-        { to: "/", name: "Home" },
-        { to: "/about", name: "About" },
-        { to: "/login", name: "Login" },
-      ],
     };
   },
   methods: {
