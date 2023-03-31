@@ -44,6 +44,7 @@
 <script>
 import { useDisplay } from "vuetify";
 import { postReq } from "@/util/util";
+import { eraseCachedPantryRecipes } from "@/util/util";
 export default {
   setup() {
     const { smAndDown } = useDisplay();
@@ -84,6 +85,7 @@ export default {
         }
       );
       if (pantry) {
+        eraseCachedPantryRecipes();
         this.$emit("updatePantry", pantry);
         this.$emit("update:modelValue", false);
       }
@@ -113,6 +115,7 @@ export default {
         }
       );
       if (pantry) {
+        eraseCachedPantryRecipes();
         this.$emit("updatePantry", pantry);
         this.$emit("update:modelValue", false);
       }

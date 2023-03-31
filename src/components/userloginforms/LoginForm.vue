@@ -38,6 +38,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
+import { postReq } from "@/util/util.js";
 
 export default {
   data() {
@@ -48,31 +49,20 @@ export default {
     };
   },
   methods: {
-    submitLogin() {
-      fetch("http://localhost:8080/v1/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      })
-        .then((response) =>
-          response.text().then((text) => {
-            // Make this more comprehensive and thorough
-            if (response.status == "200") {
-              localStorage.setItem("token", text);
-              this.mainStore.setSnackbar("Successfully logged in!", "green");
-              this.mainStore.setLogin(true);
-              this.$router.push("/");
-            } else if (!response.ok) {
-              throw new Error(text);
-            }
-          })
-        )
-        .catch((e) => this.mainStore.setSnackbar(e.message, "red-darken-3"));
+    async submitLogin() {
+      const body = {
+        username: this.username,
+        password: this.password,
+      };
+      const token = await postReq("v1/api/auth/signin", body, {
+        200: "Successfully logged in!",
+        403: "Username or Password incorrect",
+      });
+      if (token) {
+        localStorage.setItem("token", token);
+        this.mainStore.setLogin(true);
+        this.$router.push("/");
+      }
     },
   },
   computed: {

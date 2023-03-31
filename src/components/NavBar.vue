@@ -84,6 +84,7 @@ export default {
     LogOff() {
       localStorage.removeItem("token");
       this.mainStore.setLogin(false);
+      this.mainStore.erasePantrySearchValues();
     },
   },
   computed: {
