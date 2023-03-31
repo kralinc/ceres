@@ -21,15 +21,21 @@
         v-model="userInfo.lastName"
       ></v-text-field>
     </v-col>
-    <v-col cols="12" lg="6">
-      <v-text-field
-        variant="outlined"
-        label="Email Address"
-        v-model="userInfo.email"
-      ></v-text-field>
-    </v-col>
     <v-col cols="12">
       <v-btn prepend-icon="mdi-content-save" @click="updateUserInfo"
+        >Save</v-btn
+      >
+    </v-col>
+    <v-divider></v-divider>
+    <v-col cols="12">
+      <h3>Display</h3>
+      <div class="text-subtitle-1 text-medium-emphasis">Unit Type</div>
+      <v-select
+        label="Choose a Unit Type"
+        :items="unitTypes"
+        v-model="selectedUnit"
+      ></v-select>
+      <v-btn prepend-icon="mdi-content-save" @click="updateUnitPreference"
         >Save</v-btn
       >
     </v-col>
@@ -80,6 +86,9 @@ export default {
       dislikedIngredients: {},
       allFoodItems: [],
       selectedDislikedIngredients: [],
+      unitTypes: ["Metric", "Imperial"],
+      selectedUnit: "",
+      currentUnit: "",
     };
   },
   methods: {
@@ -128,6 +137,16 @@ export default {
       let nameObject = { newName: newName, nameIndicator: nameIndicator };
       return await postReq("v1/api/user/updateName", nameObject);
     },
+    async updateUnitPreference() {
+      if (this.currentUnit !== this.selectedUnit) {
+        await postReq(
+          "v1/api/user/setUserPreferences",
+          { fieldToUpdate: "unit" },
+          { 200: "Successfully updated unit preference!" }
+        );
+        this.currentUnit = this.selectedUnit;
+      }
+    },
   },
   async mounted() {
     this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -145,6 +164,12 @@ export default {
     this.allFoodItems = this.allFoodItems.filter(
       (item) => !Object.hasOwn(this.dislikedIngredients, item.id)
     );
+
+    const userPreferences = await postReq("v1/api/user/getUserPreferences");
+
+    this.currentUnit = this.selectedUnit = userPreferences.metric
+      ? "Metric"
+      : "Imperial";
   },
 };
 </script>
