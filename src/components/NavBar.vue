@@ -56,6 +56,13 @@
       >
         <v-list-item prepend-icon="mdi-cog">Settings</v-list-item>
       </router-link>
+      <router-link
+        to="/myRecipes"
+        class="router-link"
+        v-if="mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-book">My Recipes</v-list-item>
+      </router-link>
       <v-list-item
         @click="LogOff()"
         prepend-icon="mdi-logout"
@@ -78,6 +85,8 @@ export default {
   methods: {
     LogOff() {
       localStorage.removeItem("token");
+      localStorage.removeItem("tokenTimestamp");
+      localStorage.removeItem("userInfo");
       this.mainStore.setLogin(false);
       this.mainStore.erasePantrySearchValues();
     },
