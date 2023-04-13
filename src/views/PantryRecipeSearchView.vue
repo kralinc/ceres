@@ -69,7 +69,7 @@ export default {
     },
     doPagination() {
       this.numPages = Math.ceil(this.filteredRecipes.length / this.pageSize);
-      if (this.page > this.numPages) {
+      if (this.page > this.numPages || this.page < 1) {
         this.page = this.numPages;
       }
       this.visibleRecipes = this.filteredRecipes.slice(
