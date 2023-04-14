@@ -79,10 +79,13 @@ export default {
       this.cachePantrySearchValues();
     },
     async fetchPantryRecipes() {
-      this.filteredRecipes = this.recipes = await postReq(
+      const recipeObjects = await postReq(
         "v1/api/recipes/recipeWithInventory",
         { pageNumber: 0, pageSize: 99999 },
         { err: "There was a problem while fetching the recipes!" }
+      );
+      this.filteredRecipes = this.recipes = recipeObjects.map(
+        (recipeObject) => recipeObject.recipe
       );
       this.cachePantrySearchValues();
       this.doPagination();

@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="ingredient in minorIngredients" :key="ingredient.id">
           <td>{{ ingredient.name }}</td>
-          <td>{{ ingredient.description }}</td>
+          <td>{{ ingredient.description.substring(0, 100) }}</td>
           <td>
             <v-btn
               color="orange"
@@ -45,6 +45,13 @@ export default {
       allFoodItems: [],
       selectedMinorIngredients: [],
     };
+  },
+  watch: {
+    allFoodItemsProp() {
+      this.allFoodItems = this.allFoodItemsProp.filter(
+        (item) => !Object.hasOwn(this.minorIngredients, item.id)
+      );
+    },
   },
   methods: {
     async addMinorIngredients() {
@@ -94,9 +101,6 @@ export default {
         this.minorIngredients[ingredient.foodItem.id] = ingredient.foodItem;
       });
     }
-    this.allFoodItems = this.allFoodItemsProp.filter(
-      (item) => !Object.hasOwn(this.minorIngredients, item.id)
-    );
   },
 };
 </script>

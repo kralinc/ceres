@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="ingredient in dislikedIngredients" :key="ingredient.id">
           <td>{{ ingredient.name }}</td>
-          <td>{{ ingredient.description }}</td>
+          <td>{{ ingredient.description.substring(0, 100) }}</td>
           <td>
             <v-btn
               color="red"
@@ -45,6 +45,13 @@ export default {
       allFoodItems: [],
       selectedDislikedIngredients: [],
     };
+  },
+  watch: {
+    allFoodItemsProp() {
+      this.allFoodItems = this.allFoodItemsProp.filter(
+        (item) => !Object.hasOwn(this.dislikedIngredients, item.id)
+      );
+    },
   },
   methods: {
     async addDislikedIngredients() {
@@ -86,9 +93,6 @@ export default {
         this.dislikedIngredients[ingredient.foodItem.id] = ingredient.foodItem;
       });
     }
-    this.allFoodItems = this.allFoodItemsProp.filter(
-      (item) => !Object.hasOwn(this.dislikedIngredients, item.id)
-    );
   },
 };
 </script>
