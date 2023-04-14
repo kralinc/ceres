@@ -15,8 +15,12 @@
   </v-row>
   <v-row>
     <RecipeSearchResults
+      v-if="this.visibleRecipeItems.length > 0"
       v-bind:recipes="visibleRecipeItems"
     ></RecipeSearchResults>
+    <div class="text-h2" v-if="this.visibleRecipeItems <= 0">
+      You don't have any personal recipes, go create some in the uhhh yeah.
+    </div>
   </v-row>
 </template>
 <script>
@@ -34,7 +38,9 @@ export default {
   },
   async mounted() {
     this.recipeItems = await postReq("v1/api/recipes/getPersonalRecipes", {});
-    this.visibleRecipeItems = this.recipeItems;
+    if (this.recipeItems != "No Recipes Found") {
+      this.visibleRecipeItems = this.recipeItems;
+    }
   },
   methods: {
     onClear() {
