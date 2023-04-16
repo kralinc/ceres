@@ -106,7 +106,7 @@ router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
   const tokenTimestamp = localStorage.getItem("tokenTimestamp");
 
-  if (tokenTimestamp != null && tokenTimestamp <= Date.now()) {
+  if (tokenTimestamp == null || parseInt(tokenTimestamp) <= Date.now()) {
     mainStore.setLogin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("tokenTimestamp");
