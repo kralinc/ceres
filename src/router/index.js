@@ -9,6 +9,7 @@ import PantryView from "../views/PantryView.vue";
 import PantryRecipeSearchView from "../views/PantryRecipeSearchView.vue";
 import UserSettingsView from "../views/UserSettingsView.vue";
 import MyRecipesView from "../views/MyRecipesView.vue";
+import myRecipesUpload from "../views/MyRecipesUploadView.vue";
 import { useMainStore } from "@/stores/MainStore";
 
 const routes = [
@@ -91,6 +92,14 @@ const routes = [
     path: "/myRecipes",
     name: "myRecipes",
     component: MyRecipesView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/recipeUpload",
+    name: "myRecipeUpload",
+    component: myRecipesUpload,
     meta: {
       requiresAuth: true,
     },

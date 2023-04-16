@@ -11,6 +11,9 @@
         @input="filterRecipes"
         v-model="searchValue"
       ></v-text-field>
+      <router-link to="/recipeUpload" class="router-link">
+        <v-btn>Create Recipe</v-btn>
+      </router-link>
     </v-col>
   </v-row>
   <v-row>
