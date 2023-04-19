@@ -99,6 +99,7 @@ export default {
     addFoodItemToCart(foodItem) {
       if (!this.cart[foodItem.id]) {
         foodItem.quantity = 1;
+        foodItem.unit = this.units[0];
         this.cart[foodItem.id] = foodItem;
       }
     },

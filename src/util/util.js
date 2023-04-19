@@ -3,28 +3,28 @@ import { useMainStore } from "@/stores/MainStore";
 const TLD = "http://localhost:8080/";
 
 export const UNITS_METRIC = [
-  "meter",
+  "gram",
+  "kilogram",
   "piece",
-  "Celsius",
   "milliliter",
   "liter",
   "milligram",
-  "gram",
-  "kilogram",
+  "Celsius",
+  "meter",
 ];
 
 export const UNITS_IMPERIAL = [
-  "inches",
-  "feet",
-  "yard",
-  "slices",
-  "Farenheit",
-  "teaspoon",
-  "tablespoons",
   "cup",
   "gallon",
   "ounce",
   "pound",
+  "slices",
+  "teaspoon",
+  "tablespoons",
+  "Farenheit",
+  "inches",
+  "feet",
+  "yard",
 ];
 
 // = Parameters =
