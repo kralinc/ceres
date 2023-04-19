@@ -14,7 +14,7 @@
         ></v-card-title>
       </v-img>
       <v-card-text>
-        <h3>{{ pantryItem.quantity }} {{ pantryItem.unit }}</h3>
+        <h3>{{ Math.round(pantryItem.quantity) }} {{ pantryItem.unit }}</h3>
       </v-card-text>
     </v-card>
   </v-col>

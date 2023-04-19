@@ -20,7 +20,7 @@
     <v-card>
       <v-row>
         <v-col cols="12" md="3">
-          <v-img :src="'https://placekitten.com/600/450'"></v-img>
+          <v-img :src="item.foodId.picUrl"></v-img>
         </v-col>
         <v-col cols="12" md="9">
           <v-text-field
@@ -28,7 +28,7 @@
             v-model="item.quantity"
             :rules="[rules.quantity]"
           ></v-text-field>
-          <v-text-field v-model="item.unit"></v-text-field>
+          <v-select :items="units" v-model="item.unit"></v-select>
           <v-btn
             variant="outlined"
             prepend-icon="mdi-close"
@@ -42,20 +42,30 @@
   </v-dialog>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
 import { useDisplay } from "vuetify";
 import { postReq } from "@/util/util";
-import { eraseCachedPantryRecipes } from "@/util/util";
+import {
+  eraseCachedPantryRecipes,
+  UNITS_IMPERIAL,
+  UNITS_METRIC,
+} from "@/util/util";
 export default {
   setup() {
     const { smAndDown } = useDisplay();
 
     return { smAndDown };
   },
+  mounted() {
+    this.units = this.mainStore.metric ? UNITS_METRIC : UNITS_IMPERIAL;
+  },
   props: ["modelValue", "dialogItem"],
   emits: ["update:modelValue", "updatePantry"],
   data() {
     return {
       item: {},
+      units: [],
       rules: {
         quantity: (value) => value > 0 || "Quantity must be greater than zero",
       },
@@ -120,6 +130,9 @@ export default {
         this.$emit("update:modelValue", false);
       }
     },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>
