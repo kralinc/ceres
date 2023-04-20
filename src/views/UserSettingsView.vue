@@ -90,13 +90,15 @@ export default {
           { 200: "Successfully updated unit preference!" }
         );
         this.currentUnit = this.selectedUnit;
-        this.mainStore.metric = this.currentUnit === "Metric" ? true : false;
+        this.mainStore.setMetric(this.currentUnit === "Metric" ? true : false);
       }
     },
   },
   async mounted() {
     this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
+    const userPreferences = await postReq("v1/api/user/getUserPreferences");
+    this.mainStore.setMetric(userPreferences.metric);
     this.currentUnit = this.selectedUnit = this.mainStore.metric
       ? "Metric"
       : "Imperial";
