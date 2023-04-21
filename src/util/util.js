@@ -2,6 +2,31 @@ import { useMainStore } from "@/stores/MainStore";
 
 const TLD = "http://localhost:8080/";
 
+export const UNITS_METRIC = [
+  "gram",
+  "kilogram",
+  "piece",
+  "milliliter",
+  "liter",
+  "milligram",
+  "Celsius",
+  "meter",
+];
+
+export const UNITS_IMPERIAL = [
+  "cup",
+  "gallon",
+  "ounce",
+  "pound",
+  "slices",
+  "teaspoon",
+  "tablespoons",
+  "Farenheit",
+  "inches",
+  "feet",
+  "yard",
+];
+
 // = Parameters =
 // url: Everything after the top level domain that you want to request
 // e.g. If you want to access http://localhost:8080/recipe, the value of url will be "recipe"

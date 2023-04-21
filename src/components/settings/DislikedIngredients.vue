@@ -21,7 +21,7 @@
       <tbody>
         <tr v-for="ingredient in dislikedIngredients" :key="ingredient.id">
           <td>{{ ingredient.name }}</td>
-          <td>{{ ingredient.description.substring(0, 100) }}</td>
+          <td>{{ ingredient.description }}</td>
           <td>
             <v-btn
               color="red"

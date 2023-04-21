@@ -72,6 +72,8 @@ export default {
             email: loginObject.email,
           })
         );
+        const userPreferences = await postReq("v1/api/user/getUserPreferences");
+        this.mainStore.setMetric(userPreferences.metric);
         this.mainStore.setLogin(true);
         this.$router.push("/");
       }

@@ -47,6 +47,8 @@
   </v-row>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
 import DislikedIngredients from "@/components/settings/DislikedIngredients.vue";
 import MinorIngredients from "@/components/settings/MinorIngredients.vue";
 import { getReq, postReq } from "@/util/util";
@@ -88,6 +90,7 @@ export default {
           { 200: "Successfully updated unit preference!" }
         );
         this.currentUnit = this.selectedUnit;
+        this.mainStore.setMetric(this.currentUnit === "Metric" ? true : false);
       }
     },
   },
@@ -95,14 +98,17 @@ export default {
     this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const userPreferences = await postReq("v1/api/user/getUserPreferences");
-
-    this.currentUnit = this.selectedUnit = userPreferences.metric
+    this.mainStore.setMetric(userPreferences.metric);
+    this.currentUnit = this.selectedUnit = this.mainStore.metric
       ? "Metric"
       : "Imperial";
 
     this.allFoodItems = await getReq("v1/api/food", {
       err: "Something went wrong while fetching the food items.",
     });
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
   components: { DislikedIngredients, MinorIngredients },
 };
