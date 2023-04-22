@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    {{ itemsList }}
     <v-col cols="12">
       <v-card>
         <h1 class="text-h1 py-5">{{ recipe.name }}</h1>
@@ -58,6 +59,76 @@
           </v-table>
         </v-col>
       </v-row>
+    </v-col>
+  </v-row>
+  <v-divider class="ma-5"></v-divider>
+  <v-row>
+    <v-col>
+      <v-dialog v-model="dialog[0]" persistent width="1024">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            color="primary"
+            v-bind="props"
+            variant="outlined"
+            @click="loadCompleteList()"
+          >
+            Complete Recipe
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Ingredients</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Ingredient</th>
+                    <th class="text-left">Amount in Pantry</th>
+                    <th class="text-left">Amount Used</th>
+                    <th class="text-left">Amount Left</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in completeList" :key="item.id">
+                    <td>{{ item.foodItem.name }}</td>
+                    <td>{{ item.pantryCount }}</td>
+                    <td>
+                      <v-text-field
+                        v-model="item.quantity"
+                        hide-details
+                        single-line
+                        type="number"
+                        clearable
+                      ></v-text-field>
+                    </td>
+                    <td>{{ item.pantryCount - item.quantity }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="dialog[0] = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="blue-darken-1"
+              variant="text"
+              @click="completeRecipe()"
+            >
+              Complete Recipe
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-col>
   </v-row>
   <v-divider class="ma-5"></v-divider>
@@ -146,7 +217,7 @@
         <v-card-actions>
           <v-row>
             <v-col>
-              <v-dialog v-model="dialog" persistent width="1024">
+              <v-dialog v-model="dialog[1]" persistent width="1024">
                 <template v-slot:activator="{ props }">
                   <v-btn color="primary" v-bind="props" variant="outlined">
                     Rate This Recipe
@@ -183,7 +254,7 @@
                     <v-btn
                       color="blue-darken-1"
                       variant="text"
-                      @click="dialog = false"
+                      @click="dialog[1] = false"
                     >
                       Close
                     </v-btn>
@@ -243,10 +314,12 @@ import { getReq, postReq } from "@/util/util.js";
 
 export default {
   name: "RecipeView",
-  mounted() {
+  async mounted() {
     this.loadRecipe(this.$route.params.id);
     this.loadRecipeItems(this.$route.params.id);
     this.loadReviews(this.$route.params.id);
+    this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
+    this.visiblePantryItems = this.pantryItems;
   },
   data() {
     return {
@@ -255,8 +328,12 @@ export default {
       itemsList: [],
       reviews: [],
       renderReviews: [],
-      dialog: false,
+      dialog: [false, false],
+      recipeComplete: false,
       newReview: {},
+      pantryItems: [],
+      visiblePantryItems: [],
+      completeList: [],
     };
   },
   watch: {
@@ -307,14 +384,42 @@ export default {
         review: this.newReview.review,
         recipeId: this.$route.params.id,
       };
-      const pantry = await postReq("v1/api/recipes/addReview", uploadReview, {
+      const review = await postReq("v1/api/recipes/addReview", uploadReview, {
         200: "Review Successfully Added!",
         err: "Could not update reviews.",
         403: "You need to be logged in to add a review.",
       });
-      if (pantry) {
-        console.log(pantry);
+      if (review) {
+        console.log(review);
       }
+    },
+    loadCompleteList() {
+      this.completeList = this.itemsList;
+      this.completeList.forEach((item) => {
+        this.pantryItems.forEach((pantryItem) => {
+          if (pantryItem.foodId.id == item.foodItem.id) {
+            item.pantryCount = pantryItem.quantity;
+          }
+        });
+      });
+    },
+    async completeRecipe() {
+      this.completeList.forEach((item) => {
+        this.removeItem(item);
+      });
+      this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
+    },
+    async removeItem(item) {
+      const updateInventory = {
+        foodId: item.foodItem.id,
+        quantity: parseInt(item.quantity) * -1,
+        unit: item.measurementUnit,
+      };
+      await postReq("v1/api/inventory/updateInventory", updateInventory, {
+        200: "Succesfully removed items from pantry!",
+        err: "Could not update pantry.",
+        403: "You need to be logged in to update the pantry.",
+      });
     },
   },
 };
