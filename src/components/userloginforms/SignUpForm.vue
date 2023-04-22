@@ -92,7 +92,7 @@ export default {
       passwordRules: [
         (v) => !!v || "Password is required",
         (v) =>
-          /^(?=.*[A-Z])(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d$&+,:;=?@#|'<>.^*()%!-]{8,25}$/.test(
+          /^(?=.*[A-Z])(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d$&+,:;=?@#|'<>.^*()%!-]{9,25}$/.test(
             v
           ) ||
           "Password must be valid. Password must be between 8 and 25 characters. Must contain a special character and uppercase letter.",
@@ -104,7 +104,7 @@ export default {
       usernameRules: [
         (v) => !!v || "Username is required",
         (v) =>
-          /^[^1-9].{4,25}$/.test(v) ||
+          /^[^1-9].{5,25}$/.test(v) ||
           "Username must be valid. Username must be between 4 and 25 characters. It can't start with a digit.",
       ],
     };

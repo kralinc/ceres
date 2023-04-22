@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="12" sm="9" md="10">
       <v-text-field
         id="search-box"
         label="Filter Pantry"
@@ -11,18 +11,20 @@
         @input="filterRecipes"
         v-model="searchValue"
       ></v-text-field>
+    </v-col>
+    <v-col cols="12" sm="3" md="2" align-self="start">
       <router-link to="/recipeUpload" class="router-link">
-        <v-btn>Create Recipe</v-btn>
+        <v-btn class="font-weight-bold mt-2">Add Recipe</v-btn>
       </router-link>
     </v-col>
   </v-row>
-  <v-row>
+  <v-row justify="center">
     <RecipeSearchResults
       v-if="this.visibleRecipeItems.length > 0"
       v-bind:recipes="visibleRecipeItems"
     ></RecipeSearchResults>
     <div class="text-h2" v-if="this.visibleRecipeItems <= 0">
-      You don't have any personal recipes, go create some in the uhhh yeah.
+      You don't have any personal recipes, trying adding some!
     </div>
   </v-row>
 </template>
