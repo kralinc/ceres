@@ -1,10 +1,5 @@
 <template>
-  <v-col
-    cols="12"
-    lg="6"
-    v-if="cardType === 'list'"
-    @click="gotoRecipePage(recipe.id)"
-  >
+  <v-col cols="12" lg="6" @click="gotoRecipePage(recipe.id)">
     <v-card variant="tonal" class="recipe-card">
       <v-row>
         <v-col cols="4" class="d-flex">
@@ -29,27 +24,10 @@
       </v-row>
     </v-card>
   </v-col>
-  <v-col cols="12" sm="4" lg="3" xl="2" v-if="cardType === 'grid'">
-    <v-card variant="tonal" class="recipe-card"> </v-card>
-  </v-col>
-  <v-col cols="12" v-if="cardType === 'listcomp'">
-    <v-card variant="tonal" class="recipe-card text-truncate">
-      <v-card-title>{{ recipe.name }}</v-card-title>
-      {{ description }}
-      <v-rating
-        readonly
-        density="compact"
-        v-model="recipe.avgRating"
-      ></v-rating>
-    </v-card>
-  </v-col>
 </template>
 <script>
 export default {
-  props: {
-    recipeProp: Object,
-    cardType: String,
-  },
+  props: ["recipeProp"],
   computed: {
     recipe() {
       return this.recipeProp;

@@ -27,7 +27,7 @@
   </v-row>
 </template>
 <script>
-import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
+import RecipeSearchResults from "@/components/recipesearch/RecipeSearchResults.vue";
 import { postReq } from "@/util/util";
 export default {
   name: "MyRecipesView",

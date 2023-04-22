@@ -8,6 +8,8 @@ export const useMainStore = defineStore("main", {
       recipeSearchValues: {},
       pantrySearchValues: {},
       metric: false,
+      cardType: "Card",
+      cardTypes: ["Card", "List"],
     };
   },
   actions: {
@@ -25,6 +27,9 @@ export const useMainStore = defineStore("main", {
     },
     setMetric(value) {
       this.metric = value;
+    },
+    setListType(value) {
+      this.listType = value;
     },
   },
   getters: {
