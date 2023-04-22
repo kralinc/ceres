@@ -103,16 +103,16 @@ export default {
       }
     },
     addFoodItemToTable() {
-      let table = [];
+      let table = {};
       for (let itemId in this.cart) {
         const item = this.cart[itemId];
-        table.push({
+        table[itemId] = {
           foodItemId: item.id,
           name: item.name,
           description: item.description,
           quantity: item.quantity,
           unit: item.unit,
-        });
+        };
       }
 
       this.cart = {};

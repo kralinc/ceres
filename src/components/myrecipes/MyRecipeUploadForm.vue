@@ -28,17 +28,18 @@
         >Add Item</v-btn
       >
 
-      <v-table v-if="ingredientTable.length > 0">
+      <v-table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Quantity</th>
             <th>Unit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="ingredient in ingredientTable"
+            v-for="ingredient in this.ingredientTable"
             :key="ingredient.foodItemId"
           >
             <td>{{ ingredient.name }}</td>
@@ -49,11 +50,13 @@
                 type="number"
               />
             </td>
-            <td>{{ ingredient.unit }}</td>
+            <td>
+              <v-select v-model="ingredient.unit" :items="units"></v-select>
+            </td>
             <td>
               <v-btn
                 color="red"
-                @click="removeIngredient(ingredient)"
+                @click="removeIngredient(ingredient.foodItemId)"
                 icon="mdi-trash-can"
               ></v-btn>
             </td>
@@ -78,7 +81,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
-import { postReq } from "@/util/util.js";
+import { postReq, UNITS_IMPERIAL, UNITS_METRIC } from "@/util/util";
 import AddToMyRecipeDialog from "@/components/myrecipes/AddToMyRecipeDialog.vue";
 
 export default {
@@ -87,36 +90,56 @@ export default {
       showPassLogin: true,
       recipeName: "",
       description: "",
-      ingredientTable: [],
+      ingredientTable: {},
+      units: [],
       searchDialog: false,
       nameRules: [(v) => v.length <= 255 || "Max 255 characters"],
       descRules: [(v) => v.length <= 2048 || "Max 2048 characters"],
     };
   },
+  async mounted() {
+    this.units = this.mainStore.metric ? UNITS_METRIC : UNITS_IMPERIAL;
+  },
   methods: {
     updateTable(table) {
-      //todo remove duplicates
-      this.ingredientTable = this.ingredientTable.concat(table);
+      for (let ingredient in table) {
+        this.ingredientTable[ingredient] = table[ingredient];
+      }
     },
     async uploadRecipe() {
+      let ingredients = [];
+      for (let item in this.ingredientTable) {
+        ingredients.push(this.ingredientTable[item]);
+      }
+
       let recipe = {
         recipeName: this.recipeName,
         recipeDescription: this.description,
-        ingredients: this.ingredientTable,
+        ingredients: ingredients,
       };
 
-      await postReq("v1/api/recipes/uploadPersonalRecipe", recipe, {
-        200: "Successfully uploaded recipe!",
-        err: "Could not upload the recipe",
-        403: "You need to be logged in to upload a recipe",
-      });
-
-      //to do route on success
-    },
-    removeIngredient(ingredient) {
-      this.ingredientTable = this.ingredientTable.filter(
-        (x) => x.foodItemId != ingredient.foodItemId
+      const recipeObject = await postReq(
+        "v1/api/recipes/uploadPersonalRecipe",
+        recipe,
+        {
+          200: "Successfully uploaded recipe!",
+          err: "Could not upload the recipe",
+          403: "You need to be logged in to upload a recipe",
+        }
       );
+
+      if (recipeObject) {
+        this.$router.push("/myRecipes");
+      }
+    },
+    removeIngredient(foodItemId) {
+      delete this.ingredientTable[foodItemId];
+    },
+    async validate() {
+      let results = await this.$refs.form.validate();
+      if (results.valid) {
+        this.uploadRecipe();
+      }
     },
   },
   computed: {
