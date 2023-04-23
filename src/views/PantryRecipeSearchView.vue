@@ -1,18 +1,29 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-text-field
-        id="search-box"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        clearable
-        variant="solo"
-        @click:clear="onClear"
-        @input="filterRecipes"
-        v-model="searchValue"
-      ></v-text-field>
+      <v-row>
+        <v-col cols="10">
+          <v-text-field
+            id="search-box"
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            clearable
+            variant="solo"
+            @click:clear="onClear"
+            @input="filterRecipes"
+            v-model="searchValue"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-select
+            :items="mainStore.cardTypes"
+            v-model="mainStore.cardType"
+          ></v-select>
+        </v-col>
+      </v-row>
       <RecipeSearchResults
-        v-bind:recipes="visibleRecipes"
+        :recipes="visibleRecipes"
+        :cardType="mainStore.cardType"
       ></RecipeSearchResults>
       <v-row>
         <v-col cols="10">
@@ -39,7 +50,7 @@
 <script>
 import { useMainStore } from "@/stores/MainStore";
 import { mapStores } from "pinia";
-import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
+import RecipeSearchResults from "@/components/recipesearch/RecipeSearchResults.vue";
 import { postReq } from "@/util/util";
 export default {
   name: "PantryRecipeSearchView",
