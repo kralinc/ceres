@@ -14,7 +14,9 @@
     </v-col>
     <v-col cols="12" sm="3" md="2" align-self="start">
       <router-link to="/recipeUpload" class="router-link">
-        <v-btn class="font-weight-bold mt-2">Add Recipe</v-btn>
+        <v-btn class="font-weight-bold mt-2" prepend-icon="mdi-plus"
+          >Add Recipe</v-btn
+        >
       </router-link>
     </v-col>
   </v-row>

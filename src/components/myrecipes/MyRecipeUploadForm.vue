@@ -25,6 +25,7 @@
         block
         class="mx-auto mt-3"
         @click="() => (this.searchDialog = true)"
+        prepend-icon="mdi-plus"
         >Add Item</v-btn
       >
 
@@ -112,6 +113,11 @@ export default {
         ingredients.push(this.ingredientTable[item]);
       }
 
+      if (ingredients.length <= 0) {
+        this.mainStore.setSnackbar("You must include at least 1 ingredient.");
+        return;
+      }
+
       let recipe = {
         recipeName: this.recipeName,
         recipeDescription: this.description,
@@ -137,6 +143,7 @@ export default {
     },
     async validate() {
       let results = await this.$refs.form.validate();
+
       if (results.valid) {
         this.uploadRecipe();
       }
