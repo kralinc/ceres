@@ -23,7 +23,7 @@
           v-model="user.username"
           class="mx-3 my-1"
           label="Username"
-          hint="Username must be between 4 and 25 characters. It can't start with a digit."
+          hint="Username must be between 5 and 24 characters. It can't start with a digit."
           :rules="usernameRules"
           required
         ></v-text-field>
@@ -41,7 +41,7 @@
           :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPass ? 'text' : 'password'"
           label="Create Password"
-          hint="Password must be between 8 and 25 characters. Must contain a special character and uppercase letter."
+          hint="Password must be between 9 and 24 characters. Must contain a special character and uppercase letter."
           :rules="passwordRules"
           @click:append-inner="showPass = !showPass"
           required
@@ -95,7 +95,7 @@ export default {
           /^(?=.*[A-Z])(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d$&+,:;=?@#|'<>.^*()%!-]{9,25}$/.test(
             v
           ) ||
-          "Password must be valid. Password must be between 8 and 25 characters. Must contain a special character and uppercase letter.",
+          "Password must be valid. Password must be between 9 and 24 characters. Must contain a special character and uppercase letter.",
       ],
       confirmPasswordRules: [
         (v) => !!v || "Confirming the password is required",
@@ -105,7 +105,7 @@ export default {
         (v) => !!v || "Username is required",
         (v) =>
           /^[^1-9].{5,25}$/.test(v) ||
-          "Username must be valid. Username must be between 4 and 25 characters. It can't start with a digit.",
+          "Username must be valid. Username must be between 5 and 24 characters. It can't start with a digit.",
       ],
     };
   },
