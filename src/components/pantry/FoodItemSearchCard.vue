@@ -3,7 +3,7 @@
     <v-card variant="tonal">
       <v-row>
         <v-col cols="3">
-          <v-img :src="'https://placekitten.com/600/500'"></v-img>
+          <v-img :src="item.picUrl"></v-img>
         </v-col>
         <v-col cols="9">
           <v-card-title>{{ item.name }}</v-card-title>

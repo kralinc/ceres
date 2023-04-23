@@ -69,7 +69,7 @@ export default {
     },
     doPagination() {
       this.numPages = Math.ceil(this.filteredRecipes.length / this.pageSize);
-      if (this.page > this.numPages) {
+      if (this.page > this.numPages || this.page < 1) {
         this.page = this.numPages;
       }
       this.visibleRecipes = this.filteredRecipes.slice(
@@ -79,10 +79,13 @@ export default {
       this.cachePantrySearchValues();
     },
     async fetchPantryRecipes() {
-      this.filteredRecipes = this.recipes = await postReq(
+      const recipeObjects = await postReq(
         "v1/api/recipes/recipeWithInventory",
         { pageNumber: 0, pageSize: 99999 },
         { err: "There was a problem while fetching the recipes!" }
+      );
+      this.filteredRecipes = this.recipes = recipeObjects.map(
+        (recipeObject) => recipeObject.recipe
       );
       this.cachePantrySearchValues();
       this.doPagination();

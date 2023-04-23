@@ -9,6 +9,7 @@ import PantryView from "../views/PantryView.vue";
 import PantryRecipeSearchView from "../views/PantryRecipeSearchView.vue";
 import UserSettingsView from "../views/UserSettingsView.vue";
 import MyRecipesView from "../views/MyRecipesView.vue";
+import myRecipesUpload from "../views/MyRecipesUploadView.vue";
 import { useMainStore } from "@/stores/MainStore";
 
 const routes = [
@@ -95,6 +96,14 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/recipeUpload",
+    name: "myRecipeUpload",
+    component: myRecipesUpload,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
@@ -106,7 +115,7 @@ router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
   const tokenTimestamp = localStorage.getItem("tokenTimestamp");
 
-  if (tokenTimestamp != null && tokenTimestamp <= Date.now()) {
+  if (tokenTimestamp == null || parseInt(tokenTimestamp) <= Date.now()) {
     mainStore.setLogin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("tokenTimestamp");

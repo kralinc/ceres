@@ -40,85 +40,30 @@
       >
     </v-col>
     <v-divider></v-divider>
-    <v-col cols="12">
-      <h3>Allergies/Dislikes</h3>
-      <v-combobox
-        label="Add Items"
-        :items="allFoodItems"
-        v-model="selectedDislikedIngredients"
-        item-title="name"
-        return-object
-        multiple
-        chips
-      ></v-combobox>
-      <v-btn @click="addDislikedIngredients" prepend-icon="mdi-plus">Add</v-btn>
-      <v-table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="ingredient in dislikedIngredients" :key="ingredient.id">
-            <td>{{ ingredient.name }}</td>
-            <td>{{ ingredient.description }}</td>
-            <td>
-              <v-btn
-                color="red"
-                @click="removeDislikedIngredient(ingredient)"
-                icon="mdi-trash-can"
-              ></v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-col>
+    <DislikedIngredients
+      :all-food-items-prop="allFoodItems"
+    ></DislikedIngredients>
+    <MinorIngredients :all-food-items-prop="allFoodItems"></MinorIngredients>
   </v-row>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useMainStore } from "@/stores/MainStore";
+import DislikedIngredients from "@/components/settings/DislikedIngredients.vue";
+import MinorIngredients from "@/components/settings/MinorIngredients.vue";
 import { getReq, postReq } from "@/util/util";
 export default {
   name: "UserSettingsView",
   data() {
     return {
       userInfo: {},
-      dislikedIngredients: {},
-      allFoodItems: [],
-      selectedDislikedIngredients: [],
       unitTypes: ["Metric", "Imperial"],
       selectedUnit: "",
       currentUnit: "",
+      allFoodItems: [],
     };
   },
   methods: {
-    async addDislikedIngredients() {
-      for (const ingredient of this.selectedDislikedIngredients) {
-        await postReq("v1/api/inventory/addDislikedItem", ingredient.id, {
-          200: "Succesfully updated preferences!",
-          err: "There was an error while setting your disliked ingredients",
-        });
-      }
-      this.selectedDislikedIngredients.forEach((ingredient) => {
-        this.dislikedIngredients[ingredient.id] = ingredient;
-
-        for (let i = 0; i < this.allFoodItems.length; i++) {
-          if (this.allFoodItems[i].id === ingredient.id) {
-            this.allFoodItems.splice(i, 1);
-            break;
-          }
-        }
-      });
-      this.selectedDislikedIngredients = [];
-    },
-    async removeDislikedIngredient(ingredient) {
-      await postReq("v1/api/inventory/removeDislikedItem", ingredient.id, {
-        200: "Succesfully updated preferences!",
-        err: "There was an error while setting your disliked ingredients",
-      });
-      delete this.dislikedIngredients[ingredient.id];
-      this.allFoodItems.push(ingredient);
-    },
     async updateUserInfo() {
       const currentUserInfo = JSON.parse(localStorage.getItem("userInfo"));
       if (this.userInfo.firstName !== currentUserInfo.firstName) {
@@ -145,31 +90,26 @@ export default {
           { 200: "Successfully updated unit preference!" }
         );
         this.currentUnit = this.selectedUnit;
+        this.mainStore.setMetric(this.currentUnit === "Metric" ? true : false);
       }
     },
   },
   async mounted() {
     this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    const userPreferences = await postReq("v1/api/user/getUserPreferences");
+    this.mainStore.setMetric(userPreferences.metric);
+    this.currentUnit = this.selectedUnit = this.mainStore.metric
+      ? "Metric"
+      : "Imperial";
+
     this.allFoodItems = await getReq("v1/api/food", {
       err: "Something went wrong while fetching the food items.",
     });
-    const dislikedIngredients = await postReq(
-      "v1/api/inventory/getDislikedItems",
-      {},
-      { err: "Something went wrong while fetching your disliked items." }
-    );
-    dislikedIngredients.forEach((ingredient) => {
-      this.dislikedIngredients[ingredient.foodItem.id] = ingredient.foodItem;
-    });
-    this.allFoodItems = this.allFoodItems.filter(
-      (item) => !Object.hasOwn(this.dislikedIngredients, item.id)
-    );
-
-    const userPreferences = await postReq("v1/api/user/getUserPreferences");
-
-    this.currentUnit = this.selectedUnit = userPreferences.metric
-      ? "Metric"
-      : "Imperial";
   },
+  computed: {
+    ...mapStores(useMainStore),
+  },
+  components: { DislikedIngredients, MinorIngredients },
 };
 </script>

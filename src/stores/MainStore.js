@@ -7,6 +7,7 @@ export const useMainStore = defineStore("main", {
       snackbar: { active: false, color: "", message: "" },
       recipeSearchValues: {},
       pantrySearchValues: {},
+      metric: false,
     };
   },
   actions: {
@@ -21,6 +22,9 @@ export const useMainStore = defineStore("main", {
     },
     erasePantrySearchValues() {
       this.pantrySearchValues = {};
+    },
+    setMetric(value) {
+      this.metric = value;
     },
   },
   getters: {

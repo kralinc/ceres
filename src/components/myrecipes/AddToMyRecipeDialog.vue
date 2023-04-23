@@ -14,7 +14,7 @@
       <v-toolbar-title>Food Item Search</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn variant="text" @click="saveFoodItemsToPantry"> Add </v-btn>
+        <v-btn variant="text" @click="addFoodItemToTable"> Add </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-card>
@@ -58,10 +58,9 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
-import FoodItemSearchCard from "./FoodItemSearchCard.vue";
+import FoodItemSearchCard from "@/components/pantry/FoodItemSearchCard.vue";
 import { useDisplay } from "vuetify";
-import { getReq, postReq, UNITS_IMPERIAL, UNITS_METRIC } from "@/util/util";
-import { eraseCachedPantryRecipes } from "@/util/util";
+import { getReq, UNITS_IMPERIAL, UNITS_METRIC } from "@/util/util";
 
 export default {
   setup() {
@@ -74,7 +73,7 @@ export default {
     this.loadFoodItems();
   },
   props: ["modelValue"],
-  emits: ["update:modelValue", "updatePantry"],
+  emits: ["update:modelValue", "updateTable"],
   data() {
     return {
       searchValue: "",
@@ -98,36 +97,27 @@ export default {
     },
     addFoodItemToCart(foodItem) {
       if (!this.cart[foodItem.id]) {
-        foodItem.quantity = 1;
         foodItem.unit = this.units[0];
+        foodItem.quantity = 1;
         this.cart[foodItem.id] = foodItem;
       }
     },
-    async saveFoodItemsToPantry() {
-      let pantry = [];
+    addFoodItemToTable() {
+      let table = {};
       for (let itemId in this.cart) {
         const item = this.cart[itemId];
-        let updateInventory = {
-          foodId: item.id,
+        table[itemId] = {
+          foodItemId: item.id,
+          name: item.name,
+          description: item.description,
           quantity: item.quantity,
           unit: item.unit,
         };
-
-        pantry = await postReq(
-          "v1/api/inventory/updateInventory",
-          updateInventory,
-          {
-            200: "Succesfully updated pantry!",
-            err: "Could not update pantry.",
-            403: "You need to be logged in to update the pantry.",
-          }
-        );
       }
 
-      eraseCachedPantryRecipes();
       this.cart = {};
 
-      this.$emit("updatePantry", pantry);
+      this.$emit("updateTable", table);
       this.$emit("update:modelValue", false);
     },
     closeDialog() {

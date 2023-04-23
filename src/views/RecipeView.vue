@@ -171,6 +171,10 @@
       </v-col>
     </v-row>
   </template>
+  <v-row v-if="!recipe.isPublic">
+    <v-icon large @click="dialogDelete = true"> mdi-trash-can-outline </v-icon>
+  </v-row>
+
   <v-divider class="ma-5"></v-divider>
   <v-row>
     <v-col lg="12"> Reviews </v-col>
@@ -345,6 +349,28 @@
       </div>
     </v-col>
   </v-row>
+
+  <v-dialog v-model="dialogDelete" max-width="700">
+    <v-card>
+      <v-card-title class="headline"
+        >Are you sure you want to delete this recipe?</v-card-title
+      >
+
+      <v-card-text> This cannot be undone! </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn color="red darken-1" flat="flat" @click="deleteRecipe">
+          Yes
+        </v-btn>
+
+        <v-btn color="green darken-1" flat="flat" @click="dialogDelete = false">
+          No
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -367,7 +393,7 @@ export default {
   data() {
     return {
       token: localStorage.getItem("token"),
-      recipeId: -1,
+      recipeId: this.$route.params.id,
       recipe: Object,
       itemsList: [],
       completeFlag: false,
@@ -375,6 +401,7 @@ export default {
       renderReviews: [],
       dialog: [false, false],
       recipeComplete: false,
+      dialogDelete: false,
       newReview: {},
       pantryItems: [],
       visiblePantryItems: [],
@@ -508,6 +535,21 @@ export default {
         err: "Could not update pantry.",
         403: "You need to be logged in to update the pantry.",
       });
+    },
+    async deleteRecipe() {
+      const recipeDeleteObject = await postReq(
+        "v1/api/recipes/removePersonalRecipe",
+        this.recipeId,
+        {
+          200: "Recipe Successfully Removed!",
+          err: "Who fucken knows ay?",
+          403: "You need to be logged in to delete your own fucken FUCK YOU!!!",
+        }
+      );
+
+      if (recipeDeleteObject) {
+        this.$router.push("/myRecipes");
+      }
     },
   },
 };
