@@ -63,6 +63,13 @@
       >
         <v-list-item prepend-icon="mdi-book">My Recipes</v-list-item>
       </router-link>
+      <router-link
+        to="/favoriteRecipes"
+        class="router-link"
+        v-if="mainStore.isLoggedIn"
+      >
+        <v-list-item prepend-icon="mdi-heart">Favorites</v-list-item>
+      </router-link>
       <v-list-item
         @click="LogOff()"
         prepend-icon="mdi-logout"
