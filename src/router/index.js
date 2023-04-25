@@ -122,19 +122,19 @@ router.beforeEach((to, from, next) => {
     localStorage.removeItem("userInfo");
   }
 
+  const isAuthorized = localStorage.getItem("token") != null;
+  mainStore.setLogin(isAuthorized);
+
   if (to.matched.some((record) => record.meta.requiresAuth == true)) {
-    if (localStorage.getItem("token") == null) {
-      mainStore.setLogin(false);
+    if (!isAuthorized) {
       next({
         name: "login",
       });
     } else {
-      mainStore.setLogin(true);
       next();
     }
   } else if (to.matched.some((record) => record.meta.requiresAuth == false)) {
-    if (localStorage.getItem("token") != null) {
-      mainStore.setLogin(true);
+    if (isAuthorized) {
       next({
         name: "home",
       });

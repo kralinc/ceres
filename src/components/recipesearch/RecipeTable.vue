@@ -1,5 +1,5 @@
 <template>
-  <v-table>
+  <v-table class="table">
     <thead>
       <tr>
         <th>Name</th>
@@ -9,6 +9,7 @@
     </thead>
     <tbody>
       <tr
+        class="table-row"
         v-for="recipe of recipes"
         :key="recipe.id"
         @click="gotoRecipePage(recipe.id)"
@@ -39,3 +40,12 @@ export default {
   },
 };
 </script>
+<style>
+.table-row:hover {
+  cursor: pointer;
+}
+.table {
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

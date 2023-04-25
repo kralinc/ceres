@@ -24,8 +24,8 @@
     </template>
     <v-divider></v-divider>
     <v-list density="compact" nav>
-      <router-link to="/about" class="router-link"
-        ><v-list-item>About</v-list-item></router-link
+      <router-link to="/" class="router-link"
+        ><v-list-item prepend-icon="mdi-home">Home</v-list-item></router-link
       >
       <router-link to="/login" class="router-link" v-if="!mainStore.isLoggedIn">
         <v-list-item prepend-icon="mdi-login">Login</v-list-item>
