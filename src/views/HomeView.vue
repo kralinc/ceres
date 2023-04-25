@@ -117,13 +117,15 @@ export default {
       this.mainStore.recipeSearchValues.pageSize = this.pageSize;
     },
   },
-  mounted() {
+  async mounted() {
     if (Object.keys(this.mainStore.recipeSearchValues).length !== 0) {
       this.searchValue = this.mainStore.recipeSearchValues.searchValue;
       this.recipes = this.mainStore.recipeSearchValues.recipes;
       this.numPages = this.mainStore.recipeSearchValues.numPages;
       this.page = this.mainStore.recipeSearchValues.page;
       this.pageSize = this.mainStore.recipeSearchValues.pageSize;
+    } else {
+      await this.fetchRecipes(this.searchCounter, "");
     }
   },
   computed: {

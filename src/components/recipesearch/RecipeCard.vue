@@ -6,7 +6,7 @@
           <v-img
             class="img-fluid"
             :src="
-              recipe.image ? recipe.image : 'https://placekitten.com/200/200'
+              recipe.picId ? recipe.picId : 'https://placekitten.com/200/200'
             "
           />
         </v-col>
@@ -52,6 +52,10 @@ export default {
 <style>
 .recipe-card {
   padding: 5px;
+}
+
+.recipe-card:hover {
+  cursor: pointer;
 }
 
 .img-fluid {
