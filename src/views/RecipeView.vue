@@ -31,6 +31,20 @@
             </v-col>
           </v-row>
           <v-divider class="mb-3"></v-divider>
+          <template v-if="token">
+            <v-row>
+              <v-col>
+                <h3>Favorite Recipe:</h3>
+              </v-col>
+              <v-col>
+                <v-btn
+                  color="white"
+                  :icon="favoriteBtn"
+                  @click="addRemoveFav()"
+                ></v-btn>
+              </v-col>
+            </v-row>
+          </template>
         </div>
       </v-card>
     </v-col>
@@ -262,7 +276,7 @@
           <v-row>
             <v-col>
               <v-dialog v-model="dialog[1]" persistent width="1024">
-                <template v-slot:activator="{ props }">
+                <template v-if="token" v-slot:activator="{ props }">
                   <v-btn color="primary" v-bind="props" variant="outlined">
                     Rate This Recipe
                   </v-btn>
@@ -387,6 +401,7 @@ export default {
     if (this.token) {
       this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
       this.getUnitSystem();
+      this.isFavorite();
     }
     this.visiblePantryItems = this.pantryItems;
   },
@@ -396,6 +411,9 @@ export default {
       recipeId: this.$route.params.id,
       recipe: Object,
       itemsList: [],
+      favFlag: false,
+      favoriteBtn: "mdi-star-outline",
+      favorites: [],
       completeFlag: false,
       reviews: [],
       renderReviews: [],
@@ -461,6 +479,41 @@ export default {
         err: "There was a problem loading user preferences!",
       });
     },
+    async isFavorite() {
+      this.favorites = await postReq("v1/api/recipes/getFavoriteRecipes", {
+        err: "There was a problem loading user preferences!",
+      });
+      this.favorites.forEach((recipe) => {
+        if (recipe.recipe.id == this.recipeId) {
+          this.favoriteBtn = "mdi-star";
+          this.favFlag = true;
+        }
+      });
+    },
+    async addRemoveFav() {
+      // let recipeId = { recipeId: this.$route.params.id };
+      if (this.favFlag == false) {
+        await postReq(
+          "v1/api/recipes/addFavoriteRecipes",
+          this.$route.params.id,
+          {
+            err: "There was a problem adding recipe to favorites.",
+          }
+        );
+        this.favoriteBtn = "mdi-star";
+        this.favFlag = true;
+      } else {
+        await postReq(
+          "v1/api/recipes/removeFavoriteRecipes",
+          this.$route.params.id,
+          {
+            err: "There was a problem removing recipe from favorites.",
+          }
+        );
+        this.favoriteBtn = "mdi-star-outline";
+        this.favFlag = false;
+      }
+    },
     async loadRecipe(id) {
       this.recipe = await getReq("v1/api/recipes/getRecipe?id=" + id, {
         err: "There was a problem loading the recipe!",
@@ -486,14 +539,12 @@ export default {
         review: this.newReview.review,
         recipeId: this.$route.params.id,
       };
-      const review = await postReq("v1/api/recipes/addReview", uploadReview, {
+      await postReq("v1/api/recipes/addReview", uploadReview, {
         200: "Review Successfully Added!",
         err: "Could not update reviews.",
         403: "You need to be logged in to add a review.",
       });
-      if (review) {
-        console.log(review);
-      }
+      this.loadReviews(this.$route.params.id);
       this.dialog[1] = false;
     },
     loadCompleteList() {
