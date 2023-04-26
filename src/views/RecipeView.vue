@@ -390,7 +390,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
-import { getReq, postReq } from "@/util/util.js";
+import { getReq, postReq, eraseCachedPantryRecipes } from "@/util/util.js";
 
 export default {
   name: "RecipeView",
@@ -492,6 +492,7 @@ export default {
     },
     async addRemoveFav() {
       // let recipeId = { recipeId: this.$route.params.id };
+      eraseCachedPantryRecipes();
       if (this.favFlag == false) {
         await postReq(
           "v1/api/recipes/addFavoriteRecipes",
