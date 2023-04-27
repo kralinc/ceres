@@ -38,7 +38,10 @@
                 ></v-text-field>
               </td>
               <td>
-                <v-select v-model="item.unit" :items="units"></v-select>
+                <v-select
+                  v-model="item.unit"
+                  :items="units[item.unitType]"
+                ></v-select>
               </td>
             </tr>
           </v-table>
@@ -99,7 +102,7 @@ export default {
     addFoodItemToCart(foodItem) {
       if (!this.cart[foodItem.id]) {
         foodItem.quantity = 1;
-        foodItem.unit = this.units[0];
+        foodItem.unit = this.units[foodItem.unitType][0];
         this.cart[foodItem.id] = foodItem;
       }
     },

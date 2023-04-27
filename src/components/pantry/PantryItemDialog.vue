@@ -42,7 +42,10 @@
                 type="number"
                 v-model="item.quantity"
               ></v-text-field>
-              <v-select :items="units" v-model="item.unit"></v-select>
+              <v-select
+                :items="units[item.foodId.unitType]"
+                v-model="item.unit"
+              ></v-select>
               <v-btn
                 variant="outlined"
                 prepend-icon="mdi-close"

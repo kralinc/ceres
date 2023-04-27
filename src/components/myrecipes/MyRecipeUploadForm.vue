@@ -52,7 +52,10 @@
               />
             </td>
             <td>
-              <v-select v-model="ingredient.unit" :items="units"></v-select>
+              <v-select
+                v-model="ingredient.unit"
+                :items="units[ingredient.unitType]"
+              ></v-select>
             </td>
             <td>
               <v-btn
