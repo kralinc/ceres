@@ -119,3 +119,19 @@ export function eraseCachedPantryRecipes() {
   const mainStore = useMainStore();
   mainStore.erasePantrySearchValues();
 }
+
+export class userInfoUtil {
+  static getUserInfo() {
+    return JSON.parse(localStorage.getItem("userInfo"));
+  }
+
+  static setUserInfo(value) {
+    localStorage.setItem("userInfo", JSON.stringify(value));
+  }
+
+  static setUserInfoValue(property, value) {
+    const userInfo = this.getUserInfo();
+    userInfo[property] = value;
+    this.setUserInfo(userInfo);
+  }
+}
