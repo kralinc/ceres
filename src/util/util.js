@@ -2,30 +2,34 @@ import { useMainStore } from "@/stores/MainStore";
 
 const TLD = "http://localhost:8080/";
 
-export const UNITS_METRIC = [
-  "gram",
-  "kilogram",
-  "piece",
-  "milliliter",
-  "liter",
-  "milligram",
-  "Celsius",
-  "meter",
-];
+export const UNITS_METRIC = {
+  VOLUMETRIC: ["L", "ML"],
+  LENGTH: ["m"],
+  MASS: ["g", "kg", "mg"],
+  TEMPERATURE: ["C", "K"],
+  SINGULAR: ["piece"],
+  NOT_LISTED: ["default"],
+};
 
-export const UNITS_IMPERIAL = [
-  "cup",
-  "gallon",
-  "ounce",
-  "pound",
-  "slices",
-  "teaspoon",
-  "tablespoons",
-  "Farenheit",
-  "inches",
-  "feet",
-  "yard",
-];
+export const UNITS_IMPERIAL = {
+  VOLUMETRIC: [
+    "fl oz",
+    "pint",
+    "quart",
+    "gal",
+    "cups",
+    "tbsp",
+    "tsp",
+    "pinch",
+    "dash",
+    "dusting",
+  ],
+  LENGTH: ["in", "ft", "yd", "mi"],
+  MASS: ["oz", "lb", "stone", "ton"],
+  TEMPERATURE: ["F"],
+  SINGULAR: ["slices"],
+  NOT_LISTED: ["default"],
+};
 
 // = Parameters =
 // url: Everything after the top level domain that you want to request
@@ -114,4 +118,20 @@ async function fetchWrapper(url, requestBody, customText) {
 export function eraseCachedPantryRecipes() {
   const mainStore = useMainStore();
   mainStore.erasePantrySearchValues();
+}
+
+export class userInfoUtil {
+  static getUserInfo() {
+    return JSON.parse(localStorage.getItem("userInfo"));
+  }
+
+  static setUserInfo(value) {
+    localStorage.setItem("userInfo", JSON.stringify(value));
+  }
+
+  static setUserInfoValue(property, value) {
+    const userInfo = this.getUserInfo();
+    userInfo[property] = value;
+    this.setUserInfo(userInfo);
+  }
 }

@@ -51,7 +51,7 @@ import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
 import DislikedIngredients from "@/components/settings/DislikedIngredients.vue";
 import MinorIngredients from "@/components/settings/MinorIngredients.vue";
-import { getReq, postReq } from "@/util/util";
+import { getReq, postReq, userInfoUtil } from "@/util/util";
 export default {
   name: "UserSettingsView",
   data() {
@@ -76,7 +76,7 @@ export default {
           200: "Succesfully updated name!",
         });
       }
-      localStorage.setItem("userInfo", JSON.stringify(this.userInfo));
+      userInfoUtil.setUserInfo(this.userInfo);
     },
     async updateName(newName, nameIndicator) {
       let nameObject = { newName: newName, nameIndicator: nameIndicator };
@@ -90,16 +90,17 @@ export default {
           { 200: "Successfully updated unit preference!" }
         );
         this.currentUnit = this.selectedUnit;
-        this.mainStore.setMetric(this.currentUnit === "Metric" ? true : false);
+        userInfoUtil.setUserInfoValue(
+          "metric",
+          this.currentUnit === "Metric" ? true : false
+        );
       }
     },
   },
   async mounted() {
-    this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    this.userInfo = userInfoUtil.getUserInfo();
 
-    const userPreferences = await postReq("v1/api/user/getUserPreferences");
-    this.mainStore.setMetric(userPreferences.metric);
-    this.currentUnit = this.selectedUnit = this.mainStore.metric
+    this.currentUnit = this.selectedUnit = this.userInfo.metric
       ? "Metric"
       : "Imperial";
 

@@ -64,16 +64,16 @@ export default {
           "tokenTimestamp",
           Date.now() + 1000 * 60 * 60 * 10
         );
+        const userPreferences = await postReq("v1/api/user/getUserPreferences");
         localStorage.setItem(
           "userInfo",
           JSON.stringify({
             firstName: loginObject.firstName,
             lastName: loginObject.lastName,
             email: loginObject.email,
+            metric: userPreferences.metric,
           })
         );
-        const userPreferences = await postReq("v1/api/user/getUserPreferences");
-        this.mainStore.setMetric(userPreferences.metric);
         this.mainStore.setLogin(true);
         this.$router.push("/");
       }

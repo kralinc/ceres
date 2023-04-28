@@ -42,7 +42,10 @@
                 type="number"
                 v-model="item.quantity"
               ></v-text-field>
-              <v-select :items="units" v-model="item.unit"></v-select>
+              <v-select
+                :items="units[item.foodId.unitType]"
+                v-model="item.unit"
+              ></v-select>
               <v-btn
                 variant="outlined"
                 prepend-icon="mdi-close"
@@ -58,10 +61,8 @@
   </v-dialog>
 </template>
 <script>
-import { mapStores } from "pinia";
-import { useMainStore } from "@/stores/MainStore";
 import { useDisplay } from "vuetify";
-import { postReq } from "@/util/util";
+import { postReq, userInfoUtil } from "@/util/util";
 import {
   eraseCachedPantryRecipes,
   UNITS_IMPERIAL,
@@ -74,7 +75,9 @@ export default {
     return { smAndDown };
   },
   mounted() {
-    this.units = this.mainStore.metric ? UNITS_METRIC : UNITS_IMPERIAL;
+    this.units = userInfoUtil.getUserInfo().metric
+      ? UNITS_METRIC
+      : UNITS_IMPERIAL;
   },
   props: ["modelValue", "dialogItem"],
   emits: ["update:modelValue", "updatePantry"],
@@ -144,9 +147,6 @@ export default {
         this.$emit("update:modelValue", false);
       }
     },
-  },
-  computed: {
-    ...mapStores(useMainStore),
   },
 };
 </script>

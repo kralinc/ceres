@@ -136,26 +136,14 @@
                           clearable
                         ></v-text-field>
                       </td>
-                      <template v-if="unitSystem.metric">
-                        <td>
-                          <v-select
-                            v-model="item.measurementUnit"
-                            :items="metricUnits"
-                            single-line
-                            hide-details
-                          ></v-select>
-                        </td>
-                      </template>
-                      <template v-else>
-                        <td>
-                          <v-select
-                            v-model="item.measurementUnit"
-                            :items="imperialUnits"
-                            single-line
-                            hide-details
-                          ></v-select>
-                        </td>
-                      </template>
+                      <td>
+                        <v-select
+                          v-model="item.measurementUnit"
+                          :items="units[item.foodItem.unitType]"
+                          single-line
+                          hide-details
+                        ></v-select>
+                      </td>
                     </tr>
                   </tbody>
                 </v-table>
@@ -390,7 +378,14 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
-import { getReq, postReq, eraseCachedPantryRecipes } from "@/util/util.js";
+import {
+  getReq,
+  postReq,
+  eraseCachedPantryRecipes,
+  userInfoUtil,
+  UNITS_IMPERIAL,
+  UNITS_METRIC,
+} from "@/util/util.js";
 
 export default {
   name: "RecipeView",
@@ -400,9 +395,10 @@ export default {
     this.loadReviews(this.$route.params.id);
     if (this.token) {
       this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
-      this.getUnitSystem();
+      this.metric = userInfoUtil.getUserInfo().metric;
       this.isFavorite();
     }
+    this.units = this.metric ? UNITS_METRIC : UNITS_IMPERIAL;
     this.visiblePantryItems = this.pantryItems;
   },
   data() {
@@ -424,30 +420,8 @@ export default {
       pantryItems: [],
       visiblePantryItems: [],
       completeList: [],
-      unitSystem: "",
-      metricUnits: [
-        "Meter",
-        "Piece",
-        "Celsius",
-        "Milliliter",
-        "Liter",
-        "Milligram",
-        "Gram",
-        "Kilogram",
-      ],
-      imperialUnits: [
-        "Inches",
-        "Feet",
-        "Yard",
-        "Slices",
-        "Fahrenheit",
-        "Teaspoon",
-        "Tablespoon",
-        "Cup",
-        "Gallon",
-        "Ounce",
-        "Pound",
-      ],
+      metric: false,
+      units: {},
     };
   },
   watch: {
@@ -474,11 +448,6 @@ export default {
     },
   },
   methods: {
-    async getUnitSystem() {
-      this.unitSystem = await postReq("v1/api/user/getUserPreferences", {
-        err: "There was a problem loading user preferences!",
-      });
-    },
     async isFavorite() {
       this.favorites = await postReq("v1/api/recipes/getFavoriteRecipes", {
         err: "There was a problem loading user preferences!",

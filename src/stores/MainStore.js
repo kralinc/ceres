@@ -7,7 +7,6 @@ export const useMainStore = defineStore("main", {
       snackbar: { active: false, color: "", message: "" },
       recipeSearchValues: {},
       filterableRecipeSearchValues: {},
-      metric: false,
       cardType: "Card",
       cardTypes: ["Card", "List"],
     };
@@ -24,9 +23,6 @@ export const useMainStore = defineStore("main", {
     },
     erasePantrySearchValues() {
       this.filterableRecipeSearchValues = {};
-    },
-    setMetric(value) {
-      this.metric = value;
     },
     setListType(value) {
       this.listType = value;
