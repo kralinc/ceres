@@ -7,14 +7,14 @@
 <script>
 import FilterableRecipeSearch from "@/components/FilterableRecipeSearch.vue";
 export default {
-  name: "PantryRecipeSearchView",
+  name: "FavoriteRecipesView",
   data() {
     return {
       requestInfo: {
-        url: "v1/api/recipes/recipeWithInventory",
-        data: { pageNumber: 0, pageSize: 99999 },
+        url: "v1/api/recipes/getFavoriteRecipes",
+        data: {},
       },
-      name: "pantryRecipes",
+      name: "favoriteRecipes",
     };
   },
   components: { FilterableRecipeSearch },

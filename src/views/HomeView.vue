@@ -1,17 +1,30 @@
 <template>
   <v-row>
-    <v-col cols="12" lg="12">
-      <v-text-field
-        id="search-box"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        clearable
-        variant="solo"
-        @click:clear="onClear"
-        @input="fetchRecipesEvent"
-        v-model="searchValue"
-      ></v-text-field>
-      <RecipeSearchResults v-bind:recipes="recipes"></RecipeSearchResults>
+    <v-col cols="12">
+      <v-row>
+        <v-col cols="10">
+          <v-text-field
+            id="search-box"
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            clearable
+            variant="solo"
+            @click:clear="onClear"
+            @input="fetchRecipesEvent"
+            v-model="searchValue"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-select
+            :items="mainStore.cardTypes"
+            v-model="mainStore.cardType"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <RecipeSearchResults
+        :recipes="recipes"
+        :cardType="mainStore.cardType"
+      ></RecipeSearchResults>
       <v-row>
         <v-col cols="10">
           <v-pagination
@@ -38,7 +51,7 @@
 <script>
 import { useMainStore } from "@/stores/MainStore";
 import { mapStores } from "pinia";
-import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
+import RecipeSearchResults from "@/components/recipesearch/RecipeSearchResults.vue";
 import { postReq } from "@/util/util.js";
 
 export default {
@@ -104,13 +117,15 @@ export default {
       this.mainStore.recipeSearchValues.pageSize = this.pageSize;
     },
   },
-  mounted() {
+  async mounted() {
     if (Object.keys(this.mainStore.recipeSearchValues).length !== 0) {
       this.searchValue = this.mainStore.recipeSearchValues.searchValue;
       this.recipes = this.mainStore.recipeSearchValues.recipes;
       this.numPages = this.mainStore.recipeSearchValues.numPages;
       this.page = this.mainStore.recipeSearchValues.page;
       this.pageSize = this.mainStore.recipeSearchValues.pageSize;
+    } else {
+      await this.fetchRecipes(this.searchCounter, "");
     }
   },
   computed: {

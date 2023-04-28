@@ -24,6 +24,8 @@
     <RecipeSearchResults
       v-if="this.visibleRecipeItems.length > 0"
       v-bind:recipes="visibleRecipeItems"
+      v-bind:cardType="'Card'"
+      ,
     ></RecipeSearchResults>
     <div class="text-h2" v-if="this.visibleRecipeItems <= 0">
       You don't have any personal recipes, trying adding some!
@@ -31,7 +33,7 @@
   </v-row>
 </template>
 <script>
-import RecipeSearchResults from "@/components/RecipeSearchResults.vue";
+import RecipeSearchResults from "@/components/recipesearch/RecipeSearchResults.vue";
 import { postReq } from "@/util/util";
 export default {
   name: "MyRecipesView",

@@ -10,6 +10,7 @@ import PantryRecipeSearchView from "../views/PantryRecipeSearchView.vue";
 import UserSettingsView from "../views/UserSettingsView.vue";
 import MyRecipesView from "../views/MyRecipesView.vue";
 import myRecipesUpload from "../views/MyRecipesUploadView.vue";
+import FavoriteRecipesView from "../views/FavoriteRecipesView.vue";
 import { useMainStore } from "@/stores/MainStore";
 
 const routes = [
@@ -104,6 +105,14 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/favoriteRecipes",
+    name: "favoriteRecipes",
+    component: FavoriteRecipesView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
@@ -122,19 +131,19 @@ router.beforeEach((to, from, next) => {
     localStorage.removeItem("userInfo");
   }
 
+  const isAuthorized = localStorage.getItem("token") != null;
+  mainStore.setLogin(isAuthorized);
+
   if (to.matched.some((record) => record.meta.requiresAuth == true)) {
-    if (localStorage.getItem("token") == null) {
-      mainStore.setLogin(false);
+    if (!isAuthorized) {
       next({
         name: "login",
       });
     } else {
-      mainStore.setLogin(true);
       next();
     }
   } else if (to.matched.some((record) => record.meta.requiresAuth == false)) {
-    if (localStorage.getItem("token") != null) {
-      mainStore.setLogin(true);
+    if (isAuthorized) {
       next({
         name: "home",
       });
