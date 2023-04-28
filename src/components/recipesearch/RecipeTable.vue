@@ -8,25 +8,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        class="table-row"
+      <v-hover
+        v-slot="{ isHovering, props }"
         v-for="recipe of recipes"
         :key="recipe.id"
-        @click="gotoRecipePage(recipe.id)"
       >
-        <td>{{ recipe.name }}</td>
-        <td>
-          {{ recipe.description ? recipe.description.substring(0, 100) : "" }}
-        </td>
-        <td>
-          <v-rating
-            readonly
-            density="compact"
-            v-model="recipe.avgRating"
-          ></v-rating>
-          <p>({{ recipe.reviewCount }})</p>
-        </td>
-      </tr>
+        <tr
+          :class="'table-row ' + (isHovering ? 'hovering' : '')"
+          v-bind="props"
+          @click="gotoRecipePage(recipe.id)"
+        >
+          <td>{{ recipe.name }}</td>
+          <td>
+            {{ recipe.description ? recipe.description.substring(0, 100) : "" }}
+          </td>
+          <td>
+            <v-rating
+              readonly
+              density="compact"
+              v-model="recipe.avgRating"
+            ></v-rating>
+            <p>({{ recipe.reviewCount }})</p>
+          </td>
+        </tr>
+      </v-hover>
     </tbody>
   </v-table>
 </template>
@@ -47,5 +52,8 @@ export default {
 .table {
   margin-left: auto;
   margin-right: auto;
+}
+.hovering {
+  background-color: #0003;
 }
 </style>

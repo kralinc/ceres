@@ -40,7 +40,9 @@
             :items="[10, 15, 25, 50]"
             v-model="pageSize"
             class="pageSizeSelect"
-            @update:model-value="fetchRecipesEvent"
+            @update:model-value="
+              fetchRecipes(searchCounter, searchValue, pageNumber)
+            "
           ></v-select>
         </v-col>
       </v-row>
