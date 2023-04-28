@@ -174,7 +174,20 @@
     </v-row>
   </template>
   <v-row v-if="!recipe.isPublic">
-    <v-icon large @click="dialogDelete = true"> mdi-trash-can-outline </v-icon>
+    <v-col cols="12">
+      <div class="justify-start d-flex">
+        <v-btn
+          class="font-weight-bold mx-2"
+          icon="mdi-trash-can-outline"
+          @click="dialogDelete = true"
+        ></v-btn>
+        <v-btn
+          class="font-weight-bold mx-2"
+          icon="mdi-publish"
+          @click="dialogPublish = true"
+        ></v-btn>
+      </div>
+    </v-col>
   </v-row>
 
   <v-divider class="ma-5"></v-divider>
@@ -373,6 +386,32 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="dialogPublish" max-width="700">
+    <v-card>
+      <v-card-title class="headline"
+        >Are you sure you want to publish this recipe?</v-card-title
+      >
+
+      <v-card-text> This cannot be undone! </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn color="red darken-1" flat="flat" @click="publishRecipe">
+          Yes
+        </v-btn>
+
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="dialogPublish = false"
+        >
+          No
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -416,6 +455,7 @@ export default {
       dialog: [false, false],
       recipeComplete: false,
       dialogDelete: false,
+      dialogPublish: false,
       newReview: {},
       pantryItems: [],
       visiblePantryItems: [],
@@ -563,12 +603,27 @@ export default {
         this.recipeId,
         {
           200: "Recipe Successfully Removed!",
-          err: "Who fucken knows ay?",
-          403: "You need to be logged in to delete your own fucken FUCK YOU!!!",
+          err: "An error has occurred",
+          403: "You need to be logged in to delete your recipe",
         }
       );
 
       if (recipeDeleteObject) {
+        this.$router.push("/myRecipes");
+      }
+    },
+    async publishRecipe() {
+      const recipePublishObject = await postReq(
+        "v1/api/recipes/publishPersonalRecipe",
+        this.recipeId,
+        {
+          200: "Recipe Successfully Published!",
+          err: "An error has occurred",
+          403: "You need to be logged in to publish your recipes!",
+        }
+      );
+
+      if (recipePublishObject) {
         this.$router.push("/myRecipes");
       }
     },

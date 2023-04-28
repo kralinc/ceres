@@ -13,6 +13,10 @@
       ></v-text-field>
     </v-col>
     <v-col cols="12" sm="3" md="2" align-self="start">
+      <v-select
+        :items="mainStore.cardTypes"
+        v-model="mainStore.cardType"
+      ></v-select>
       <router-link to="/recipeUpload" class="router-link">
         <v-btn class="font-weight-bold mt-2" prepend-icon="mdi-plus"
           >Add Recipe</v-btn
@@ -24,8 +28,7 @@
     <RecipeSearchResults
       v-if="this.visibleRecipeItems.length > 0"
       v-bind:recipes="visibleRecipeItems"
-      v-bind:cardType="'Card'"
-      ,
+      v-bind:cardType="mainStore.cardType"
     ></RecipeSearchResults>
     <div class="text-h2" v-if="this.visibleRecipeItems <= 0">
       You don't have any personal recipes, trying adding some!
@@ -33,6 +36,8 @@
   </v-row>
 </template>
 <script>
+import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
 import RecipeSearchResults from "@/components/recipesearch/RecipeSearchResults.vue";
 import { postReq } from "@/util/util";
 export default {
@@ -61,6 +66,9 @@ export default {
         item.name.toLowerCase().includes(this.searchValue.toLowerCase())
       );
     },
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
   components: {
     RecipeSearchResults,
