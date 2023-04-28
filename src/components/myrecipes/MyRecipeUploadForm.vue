@@ -52,7 +52,10 @@
               />
             </td>
             <td>
-              <v-select v-model="ingredient.unit" :items="units"></v-select>
+              <v-select
+                v-model="ingredient.unit"
+                :items="units[ingredient.unitType]"
+              ></v-select>
             </td>
             <td>
               <v-btn
@@ -80,9 +83,12 @@
 </template>
 
 <script>
-import { mapStores } from "pinia";
-import { useMainStore } from "@/stores/MainStore";
-import { postReq, UNITS_IMPERIAL, UNITS_METRIC } from "@/util/util";
+import {
+  postReq,
+  UNITS_IMPERIAL,
+  UNITS_METRIC,
+  userInfoUtil,
+} from "@/util/util";
 import AddToMyRecipeDialog from "@/components/myrecipes/AddToMyRecipeDialog.vue";
 
 export default {
@@ -99,7 +105,9 @@ export default {
     };
   },
   async mounted() {
-    this.units = this.mainStore.metric ? UNITS_METRIC : UNITS_IMPERIAL;
+    this.units = userInfoUtil.getUserInfo().metric
+      ? UNITS_METRIC
+      : UNITS_IMPERIAL;
   },
   methods: {
     updateTable(table) {
@@ -148,9 +156,6 @@ export default {
         this.uploadRecipe();
       }
     },
-  },
-  computed: {
-    ...mapStores(useMainStore),
   },
   components: {
     AddToMyRecipeDialog,

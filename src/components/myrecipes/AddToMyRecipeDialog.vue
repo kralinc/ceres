@@ -38,7 +38,10 @@
                 ></v-text-field>
               </td>
               <td>
-                <v-select v-model="item.unit" :items="units"></v-select>
+                <v-select
+                  v-model="item.unit"
+                  :items="units[item.unitType]"
+                ></v-select>
               </td>
             </tr>
           </v-table>
@@ -56,11 +59,14 @@
   </v-dialog>
 </template>
 <script>
-import { mapStores } from "pinia";
-import { useMainStore } from "@/stores/MainStore";
 import FoodItemSearchCard from "@/components/pantry/FoodItemSearchCard.vue";
 import { useDisplay } from "vuetify";
-import { getReq, UNITS_IMPERIAL, UNITS_METRIC } from "@/util/util";
+import {
+  getReq,
+  UNITS_IMPERIAL,
+  UNITS_METRIC,
+  userInfoUtil,
+} from "@/util/util";
 
 export default {
   setup() {
@@ -69,7 +75,9 @@ export default {
     return { smAndDown };
   },
   async mounted() {
-    this.units = this.mainStore.metric ? UNITS_METRIC : UNITS_IMPERIAL;
+    this.units = userInfoUtil.getUserInfo().metric
+      ? UNITS_METRIC
+      : UNITS_IMPERIAL;
     this.loadFoodItems();
   },
   props: ["modelValue"],
@@ -97,7 +105,7 @@ export default {
     },
     addFoodItemToCart(foodItem) {
       if (!this.cart[foodItem.id]) {
-        foodItem.unit = this.units[0];
+        foodItem.unit = this.units[foodItem.unitType][0];
         foodItem.quantity = 1;
         this.cart[foodItem.id] = foodItem;
       }
@@ -112,6 +120,7 @@ export default {
           description: item.description,
           quantity: item.quantity,
           unit: item.unit,
+          unitType: item.unitType,
         };
       }
 
@@ -127,9 +136,6 @@ export default {
   },
   components: {
     FoodItemSearchCard,
-  },
-  computed: {
-    ...mapStores(useMainStore),
   },
 };
 </script>
