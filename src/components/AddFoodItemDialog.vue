@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
     fullscreen
   >
-    <v-toolbar dark color="primary">
-      <v-btn icon dark @click="closeDialog">
+    <v-toolbar color="green-darken-1">
+      <v-btn icon @click="closeDialog">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-toolbar-title>Food Item Search</v-toolbar-title>

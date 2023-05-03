@@ -94,7 +94,7 @@
         <v-dialog v-model="dialog[0]" persistent width="1024">
           <template v-slot:activator="{ props }">
             <v-btn
-              color="primary"
+              color="green-darken-1"
               v-bind="props"
               variant="outlined"
               @click="loadCompleteList()"
@@ -265,7 +265,11 @@
             <v-col>
               <v-dialog v-model="dialog[1]" persistent width="1024">
                 <template v-if="token" v-slot:activator="{ props }">
-                  <v-btn color="primary" v-bind="props" variant="outlined">
+                  <v-btn
+                    color="green-darken-1"
+                    v-bind="props"
+                    variant="outlined"
+                  >
                     Rate This Recipe
                   </v-btn>
                 </template>
