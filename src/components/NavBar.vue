@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="primary" prominent>
+  <v-app-bar color="green-darken-1" prominent>
     <v-toolbar-title>MyKitchen</v-toolbar-title>
 
     <v-spacer></v-spacer>
@@ -96,6 +96,7 @@ export default {
       localStorage.removeItem("userInfo");
       this.mainStore.setLogin(false);
       this.mainStore.erasePantrySearchValues();
+      this.$router.push("/");
     },
   },
   computed: {

@@ -24,7 +24,7 @@
       <v-btn
         block
         class="mx-auto mt-3"
-        @click="() => (this.searchDialog = true)"
+        @click="() => (this.searchDialog = !this.searchDialog)"
         prepend-icon="mdi-plus"
         >Add Item</v-btn
       >

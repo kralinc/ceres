@@ -7,8 +7,8 @@
     transition="dialog-bottom-transition"
     :fullscreen="smAndDown"
   >
-    <v-toolbar dark color="primary">
-      <v-btn icon dark @click="$emit('update:modelValue', false)">
+    <v-toolbar color="green-darken-1">
+      <v-btn icon @click="$emit('update:modelValue', false)">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-toolbar-title>{{ item.foodId.name }}</v-toolbar-title>

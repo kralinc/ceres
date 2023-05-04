@@ -1,28 +1,35 @@
 <template>
   <v-col cols="12" lg="6" @click="gotoRecipePage(recipe.id)">
-    <v-card variant="tonal" class="recipe-card">
-      <v-row>
-        <v-col cols="4" class="d-flex">
-          <v-img
-            class="img-fluid"
-            :src="
-              recipe.picId ? recipe.picId : 'https://placekitten.com/200/200'
-            "
-          />
-        </v-col>
-        <v-col cols="8">
-          <v-card-title>{{ recipe.name }}</v-card-title>
-          {{ description }}
-          <v-spacer></v-spacer>
-          <v-rating
-            readonly
-            density="compact"
-            v-model="recipe.avgRating"
-          ></v-rating>
-          <p>({{ recipe.reviewCount }})</p>
-        </v-col>
-      </v-row>
-    </v-card>
+    <v-hover v-slot="{ isHovering, props }">
+      <v-card
+        variant="tonal"
+        class="recipe-card"
+        v-bind="props"
+        :elevation="isHovering ? 16 : 0"
+      >
+        <v-row>
+          <v-col cols="4" class="d-flex">
+            <v-img
+              class="img-fluid"
+              :src="
+                recipe.picId ? recipe.picId : 'https://placekitten.com/200/200'
+              "
+            />
+          </v-col>
+          <v-col cols="8">
+            <v-card-title>{{ recipe.name }}</v-card-title>
+            {{ description }}
+            <v-spacer></v-spacer>
+            <v-rating
+              readonly
+              density="compact"
+              v-model="recipe.avgRating"
+            ></v-rating>
+            <p>({{ recipe.reviewCount }})</p>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-hover>
   </v-col>
 </template>
 <script>

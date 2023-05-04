@@ -13,7 +13,7 @@
       ></v-text-field>
     </v-col>
     <v-col cols="12">
-      <v-btn prepend-icon="mdi-plus" @click="searchDialog = true"
+      <v-btn prepend-icon="mdi-plus" @click="searchDialog = !searchDialog"
         >Add Items</v-btn
       >
     </v-col>
@@ -35,8 +35,8 @@
     @update-pantry="updatePantry"
   ></PantryItemDialog>
   <AddToPantryDialog
-    v-model="searchDialog"
     @update-pantry="updatePantry"
+    :open-trigger="searchDialog"
   ></AddToPantryDialog>
 </template>
 <script>
