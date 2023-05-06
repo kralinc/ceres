@@ -2,7 +2,7 @@
   <v-app>
     <NavBar></NavBar>
     <v-main>
-      <v-container>
+      <v-container class="container">
         <router-view />
       </v-container>
       <v-snackbar
@@ -60,6 +60,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+html,
+body,
+.container {
+  height: 100%;
 }
 
 nav {

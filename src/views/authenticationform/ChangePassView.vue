@@ -5,9 +5,9 @@ import { mapStores } from "pinia";
 </script>
 
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col lg="7">
-      <ChangePassForm class="ma-5"></ChangePassForm>
+  <v-row class="rowSize" align="center" justify="center" no-gutters>
+    <v-col lg="6">
+      <ChangePassForm class="mb-12"></ChangePassForm>
     </v-col>
   </v-row>
 </template>
@@ -24,10 +24,10 @@ export default {
   computed: {
     ...mapStores(useMainStore),
   },
-  //  mounted() {
-  //    if (this.message != false) {
-  //      this.mainStore.setSnackbar(this.message, "red-darken-3");
-  //    }
-  //  },
 };
 </script>
+<style>
+.rowSize {
+  height: 100%;
+}
+</style>

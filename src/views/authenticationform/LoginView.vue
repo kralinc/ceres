@@ -5,9 +5,9 @@ import { mapStores } from "pinia";
 </script>
 
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col lg="7">
-      <LoginForm class="ma-5"></LoginForm>
+  <v-row class="rowSize" align="center" justify="center" no-gutters>
+    <v-col lg="6">
+      <LoginForm class="mb-12"></LoginForm>
     </v-col>
   </v-row>
 </template>
@@ -26,3 +26,8 @@ export default {
   },
 };
 </script>
+<style>
+.rowSize {
+  height: 100%;
+}
+</style>
