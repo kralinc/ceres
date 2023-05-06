@@ -6,17 +6,24 @@
         <router-view />
       </v-container>
       <v-snackbar
+        class="font-weight-bold"
         id="popup"
         v-model="mainStore.snackbar.active"
         :timeout="-1"
         :color="mainStore.snackbar.color"
         variant="outlined"
-        vertical
       >
         {{ mainStore.snackbar.message }}
-        <v-btn text @click="mainStore.snackbar.active = false">
-          Close
-        </v-btn></v-snackbar
+        <template v-slot:actions>
+          <v-btn
+            class="font-weight-bold"
+            color="mainStore.snackbar.color"
+            variant="text"
+            @click="mainStore.snackbar.active = false"
+          >
+            Close
+          </v-btn>
+        </template></v-snackbar
       >
     </v-main>
   </v-app>
