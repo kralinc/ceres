@@ -1,26 +1,29 @@
 <template>
   <v-app-bar color="green-darken-1" prominent>
-    <v-toolbar-title>MyKitchen</v-toolbar-title>
-
-    <v-spacer></v-spacer>
-    <Transition name="pop">
-      <p class="avatar-name" v-if="drawer">Jane Smith</p>
-    </Transition>
-    <v-btn icon>
-      <v-avatar
-        @click="drawer = !drawer"
-        image="https://randomuser.me/api/portraits/women/81.jpg"
-      ></v-avatar>
-    </v-btn>
+    <v-row>
+      <v-col align="left">
+        <v-toolbar-title class="mt-2 ml-12">MyKitchen</v-toolbar-title></v-col
+      >
+      <v-col align="right">
+        <v-btn icon class="mr-4">
+          <v-avatar
+            @click="OpenDrawer()"
+            image="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flaiacc.com%2Fwp-content%2Fuploads%2F2019%2F03%2Fblank-profile-picture-973460_1280-1030x1030.png&f=1&nofb=1&ipt=f032d3872e30736848e04996f09d8f8dd76ffa03858153596fdf7cacc5bfe63e&ipo=images"
+          ></v-avatar>
+        </v-btn>
+      </v-col>
+    </v-row>
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" temporary location="right">
     <template v-slot:prepend>
       <v-list-item
         lines="two"
-        prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
-        title="Jane Smith"
-        subtitle="Logged in"
-      ></v-list-item>
+        prepend-avatar="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flaiacc.com%2Fwp-content%2Fuploads%2F2019%2F03%2Fblank-profile-picture-973460_1280-1030x1030.png&f=1&nofb=1&ipt=f032d3872e30736848e04996f09d8f8dd76ffa03858153596fdf7cacc5bfe63e&ipo=images"
+      >
+        {{
+          this.userInfo.firstName + " " + this.userInfo.lastName
+        }}</v-list-item
+      >
     </template>
     <v-divider></v-divider>
     <v-list density="compact" nav>
@@ -87,6 +90,7 @@ export default {
   data() {
     return {
       drawer: false,
+      userInfo: { firstName: "Welcome", lastName: "" },
     };
   },
   methods: {
@@ -96,7 +100,17 @@ export default {
       localStorage.removeItem("userInfo");
       this.mainStore.setLogin(false);
       this.mainStore.erasePantrySearchValues();
-      this.$router.push("/");
+      (this.userInfo = { firstName: "Welcome", lastName: "" }),
+        this.$router.push("/");
+    },
+    OpenDrawer() {
+      this.GrabUserInfo();
+      this.drawer = !this.drawer;
+    },
+    GrabUserInfo() {
+      if (localStorage.getItem("userInfo") != null) {
+        this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      }
     },
   },
   computed: {
