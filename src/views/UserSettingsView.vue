@@ -77,7 +77,7 @@ export default {
     async updateName(newName, nameIndicator) {
       let nameObject = { newName: newName, nameIndicator: nameIndicator };
       return await postReq("v1/api/user/updateName", nameObject, {
-        200: "Succesfully updated name!",
+        200: "Successfully updated name!",
       });
     },
     async updateUnitPreference() {

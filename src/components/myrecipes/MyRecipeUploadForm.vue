@@ -90,6 +90,8 @@ import {
   userInfoUtil,
 } from "@/util/util";
 import AddToMyRecipeDialog from "@/components/myrecipes/AddToMyRecipeDialog.vue";
+import { useMainStore } from "@/stores/MainStore";
+import { mapStores } from "pinia";
 
 export default {
   data() {
@@ -159,6 +161,9 @@ export default {
   },
   components: {
     AddToMyRecipeDialog,
+  },
+  computed: {
+    ...mapStores(useMainStore),
   },
 };
 </script>

@@ -598,7 +598,7 @@ export default {
         unit: item.measurementUnit,
       };
       await postReq("v1/api/inventory/updateInventory", updateInventory, {
-        200: "Succesfully removed items from pantry!",
+        200: "Successfully removed items from pantry!",
         err: "Could not update pantry.",
         403: "You need to be logged in to update the pantry.",
       });

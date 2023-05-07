@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { postReq } from "@/util/util.js";
+import { postReq, eraseCachedPantryRecipes } from "@/util/util.js";
 export default {
   props: ["allFoodItemsProp"],
   data() {
@@ -60,7 +60,7 @@ export default {
           "v1/api/inventory/markItem",
           { itemId: ingredient.id, command: "add" },
           {
-            200: "Succesfully updated preferences!",
+            200: "Successfully updated preferences!",
             err: "There was an error while setting your Minor ingredients",
           }
         );
@@ -76,18 +76,20 @@ export default {
         }
       });
       this.selectedMinorIngredients = [];
+      eraseCachedPantryRecipes();
     },
     async removeMinorIngredient(ingredient) {
       await postReq(
         "v1/api/inventory/markItem",
         { itemId: ingredient.id, command: "remove" },
         {
-          200: "Succesfully updated preferences!",
+          200: "Successfully updated preferences!",
           err: "There was an error while setting your Minor ingredients",
         }
       );
       delete this.minorIngredients[ingredient.id];
       this.allFoodItems.push(ingredient);
+      eraseCachedPantryRecipes();
     },
   },
   async mounted() {
