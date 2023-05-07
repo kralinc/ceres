@@ -18,7 +18,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-card>
-      <v-row>
+      <v-row class="wrapper">
         <v-col cols="12" md="3">
           <v-img :src="item.foodId.picUrl"></v-img>
         </v-col>
@@ -150,3 +150,8 @@ export default {
   },
 };
 </script>
+<style>
+.wrapper {
+  padding: 1em;
+}
+</style>

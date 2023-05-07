@@ -34,7 +34,7 @@
             @update:model-value="changePage"
           ></v-pagination>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="2" class="d-flex align-center">
           <v-select
             label="Page Size"
             :items="[10, 15, 25, 50]"
