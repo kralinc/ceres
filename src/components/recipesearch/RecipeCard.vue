@@ -20,12 +20,19 @@
             <v-card-title>{{ recipe.name }}</v-card-title>
             {{ description }}
             <v-spacer></v-spacer>
-            <v-rating
-              readonly
-              density="compact"
-              v-model="recipe.avgRating"
-            ></v-rating>
-            <p>({{ recipe.reviewCount }})</p>
+            <v-row v-if="recipe.isPublic">
+              <v-col cols="7" class="d-flex align-center">
+                <v-rating
+                  class="ml-auto"
+                  readonly
+                  density="compact"
+                  v-model="recipe.avgRating"
+                ></v-rating>
+              </v-col>
+              <v-col cols="5" class="d-flex align-center">
+                <p class="mr-auto">({{ recipe.reviewCount }})</p>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card>
@@ -43,7 +50,7 @@ export default {
       return (
         this.recipe.description.substring(
           0,
-          Math.min(250, this.recipe.description.length)
+          Math.min(247, this.recipe.description.length)
         ) + "..."
       );
     },
@@ -58,7 +65,7 @@ export default {
 
 <style>
 .recipe-card {
-  padding: 5px;
+  padding: 5px !important;
 }
 
 .recipe-card:hover {

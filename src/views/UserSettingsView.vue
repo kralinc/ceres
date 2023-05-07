@@ -65,22 +65,20 @@ export default {
   },
   methods: {
     async updateUserInfo() {
-      const currentUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const currentUserInfo = userInfoUtil.getUserInfo();
       if (this.userInfo.firstName !== currentUserInfo.firstName) {
-        await this.updateName(this.userInfo.firstName, "first", {
-          200: "Succesfully updated name!",
-        });
+        await this.updateName(this.userInfo.firstName, "first");
       }
       if (this.userInfo.lastName !== currentUserInfo.lastName) {
-        await this.updateName(this.userInfo.lastName, "last", {
-          200: "Succesfully updated name!",
-        });
+        await this.updateName(this.userInfo.lastName, "last");
       }
       userInfoUtil.setUserInfo(this.userInfo);
     },
     async updateName(newName, nameIndicator) {
       let nameObject = { newName: newName, nameIndicator: nameIndicator };
-      return await postReq("v1/api/user/updateName", nameObject);
+      return await postReq("v1/api/user/updateName", nameObject, {
+        200: "Succesfully updated name!",
+      });
     },
     async updateUnitPreference() {
       if (this.currentUnit !== this.selectedUnit) {

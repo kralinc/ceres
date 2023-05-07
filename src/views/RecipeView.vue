@@ -18,7 +18,7 @@
           >
           </v-img>
         </div>
-        <div class="mt-5">
+        <div class="mt-5" v-if="recipe.isPublic">
           <v-row>
             <v-col>
               <v-rating
@@ -191,183 +191,185 @@
   </v-row>
 
   <v-divider class="ma-5"></v-divider>
-  <v-row>
-    <v-col lg="12"> Reviews </v-col>
-  </v-row>
-  <v-row>
-    <v-col lg="4">
-      <v-card>
-        <v-card-title>
-          <div>
-            <v-row no-gutters>
-              <v-col lg="12" class="text-left">
-                <strong>Customer Reviews</strong>
-              </v-col>
-            </v-row>
-            <v-row no-gutters>
-              <v-col class="text-left ml-1">
-                <v-rating
-                  readonly
-                  v-model="recipe.avgRating"
-                  color="black"
-                  active-color="yellow-accent-4"
-                  size="medium"
-                ></v-rating>
-                <span class="text-grey-lighten-2 text-caption me-2">
-                  ({{ recipe.avgRating }})
-                </span>
-              </v-col>
-            </v-row>
-          </div>
-        </v-card-title>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-row no-gutters>
-            <v-col cols="12" class="ma-0 pa-0">
-              <v-checkbox
-                v-model="renderReviews"
-                label="5 Stars"
-                density="compact"
-                value="5"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" class="ma-0 pa-0">
-              <v-checkbox
-                v-model="renderReviews"
-                label="4 Stars"
-                density="compact"
-                value="4"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" class="ma-0 pa-0">
-              <v-checkbox
-                v-model="renderReviews"
-                label="3 Stars"
-                density="compact"
-                value="3"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" class="ma-0 pa-0">
-              <v-checkbox
-                v-model="renderReviews"
-                label="2 Stars"
-                density="compact"
-                value="2"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" class="ma-0 pa-0">
-              <v-checkbox
-                v-model="renderReviews"
-                label="1 Stars"
-                density="compact"
-                value="1"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-row>
-            <v-col>
-              <v-dialog v-model="dialog[1]" persistent width="1024">
-                <template v-if="token" v-slot:activator="{ props }">
-                  <v-btn
-                    color="green-darken-1"
-                    v-bind="props"
-                    variant="outlined"
-                  >
-                    Rate This Recipe
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">Recipe Review</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6">
-                          <v-select
-                            :items="[1, 2, 3, 4, 5]"
-                            label="Rating*"
-                            v-model="newReview.stars"
-                            required
-                          ></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            label="Description"
-                            v-model="newReview.review"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                    <small>*indicates required field</small>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="dialog[1] = false"
-                    >
-                      Close
-                    </v-btn>
-                    <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="uploadReview()"
-                    >
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-    <v-col lg="8">
-      <div v-for="review in reviews" :key="review.id" class="mb-5">
-        <v-card v-if="review.show">
-          <div class="ma-1">
-            <div class="mx-3">
-              <v-card-actions>
-                <a>{{ review.user.username }}</a>
-
-                <v-spacer></v-spacer>
-
-                <span class="text-grey-lighten-2 text-caption me-2">
-                  ({{ review.stars }})
-                </span>
-
-                <v-rating
-                  readonly
-                  v-model="review.stars"
-                  color="black"
-                  active-color="yellow-accent-4"
-                  size="25"
-                ></v-rating>
-              </v-card-actions>
+  <div v-if="recipe.isPublic">
+    <v-row>
+      <v-col lg="12"> Reviews </v-col>
+    </v-row>
+    <v-row>
+      <v-col lg="4">
+        <v-card>
+          <v-card-title>
+            <div>
+              <v-row no-gutters>
+                <v-col lg="12" class="text-left">
+                  <strong>Customer Reviews</strong>
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col class="text-left ml-1">
+                  <v-rating
+                    readonly
+                    v-model="recipe.avgRating"
+                    color="black"
+                    active-color="yellow-accent-4"
+                    size="medium"
+                  ></v-rating>
+                  <span class="text-grey-lighten-2 text-caption me-2">
+                    ({{ recipe.avgRating }})
+                  </span>
+                </v-col>
+              </v-row>
             </div>
-            <v-divider class="ma-3"></v-divider>
-            <v-card-text class="text-left">
-              {{ review.review }}
-            </v-card-text>
-          </div>
+          </v-card-title>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-row no-gutters>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-checkbox
+                  v-model="renderReviews"
+                  label="5 Stars"
+                  density="compact"
+                  value="5"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-checkbox
+                  v-model="renderReviews"
+                  label="4 Stars"
+                  density="compact"
+                  value="4"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-checkbox
+                  v-model="renderReviews"
+                  label="3 Stars"
+                  density="compact"
+                  value="3"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-checkbox
+                  v-model="renderReviews"
+                  label="2 Stars"
+                  density="compact"
+                  value="2"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-checkbox
+                  v-model="renderReviews"
+                  label="1 Stars"
+                  density="compact"
+                  value="1"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-row>
+              <v-col>
+                <v-dialog v-model="dialog[1]" persistent width="1024">
+                  <template v-if="token" v-slot:activator="{ props }">
+                    <v-btn
+                      color="green-darken-1"
+                      v-bind="props"
+                      variant="outlined"
+                    >
+                      Rate This Recipe
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Recipe Review</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="6">
+                            <v-select
+                              :items="[1, 2, 3, 4, 5]"
+                              label="Rating*"
+                              v-model="newReview.stars"
+                              required
+                            ></v-select>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="4">
+                            <v-text-field
+                              label="Description"
+                              v-model="newReview.review"
+                              required
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                      <small>*indicates required field</small>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="dialog[1] = false"
+                      >
+                        Close
+                      </v-btn>
+                      <v-btn
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="uploadReview()"
+                      >
+                        Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-col>
+            </v-row>
+          </v-card-actions>
         </v-card>
-      </div>
-    </v-col>
-  </v-row>
+      </v-col>
+      <v-col lg="8">
+        <div v-for="review in reviews" :key="review.id" class="mb-5">
+          <v-card v-if="review.show">
+            <div class="ma-1">
+              <div class="mx-3">
+                <v-card-actions>
+                  <a>{{ review.user.username }}</a>
+
+                  <v-spacer></v-spacer>
+
+                  <span class="text-grey-lighten-2 text-caption me-2">
+                    ({{ review.stars }})
+                  </span>
+
+                  <v-rating
+                    readonly
+                    v-model="review.stars"
+                    color="black"
+                    active-color="yellow-accent-4"
+                    size="25"
+                  ></v-rating>
+                </v-card-actions>
+              </div>
+              <v-divider class="ma-3"></v-divider>
+              <v-card-text class="text-left">
+                {{ review.review }}
+              </v-card-text>
+            </div>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 
   <v-dialog v-model="dialogDelete" max-width="700">
     <v-card>

@@ -2,16 +2,17 @@
   <v-app>
     <NavBar></NavBar>
     <v-main>
-      <v-container class="container">
-        <router-view />
-      </v-container>
+      <v-content>
+        <v-container class="container">
+          <router-view />
+        </v-container>
+      </v-content>
       <v-snackbar
         class="font-weight-bold"
         id="popup"
         v-model="mainStore.snackbar.active"
-        :timeout="-1"
+        :timeout="3500"
         :color="mainStore.snackbar.color"
-        variant="outlined"
       >
         {{ mainStore.snackbar.message }}
         <template v-slot:actions>
