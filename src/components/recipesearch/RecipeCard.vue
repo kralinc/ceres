@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" lg="6" @click="gotoRecipePage(recipe.id)">
+  <v-col cols="12" lg="6" @click="gotoRecipePage(recipe)">
     <v-hover v-slot="{ isHovering, props }">
       <v-card
         variant="tonal"
@@ -56,8 +56,11 @@ export default {
     },
   },
   methods: {
-    gotoRecipePage(id) {
-      this.$router.push("/recipe/" + id);
+    gotoRecipePage(recipe) {
+      this.$router.push({
+        path: "/recipe/" + recipe.id,
+        query: { toSub: recipe.foodIdToReplace, sub: recipe.subbedId },
+      });
     },
   },
 };
