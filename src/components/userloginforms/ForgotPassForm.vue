@@ -20,6 +20,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
+import { TLD } from "@/util/util.js";
 
 export default {
   data() {
@@ -36,7 +37,7 @@ export default {
   },
   methods: {
     submitPassReset() {
-      fetch("http://localhost:8080/v1/api/auth/resetPassword", {
+      fetch(TLD + "v1/api/auth/resetPassword", {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",

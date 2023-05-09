@@ -1,6 +1,6 @@
 import { useMainStore } from "@/stores/MainStore";
 
-const TLD = "http://localhost:8080/";
+export const TLD = "http://localhost:8080/";
 
 export const UNITS_METRIC = {
   VOLUMETRIC: ["L", "ML"],
