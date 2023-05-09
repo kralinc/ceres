@@ -40,6 +40,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
+import { postReq } from "@/util/util.js";
 
 export default {
   data() {
@@ -57,33 +58,16 @@ export default {
     };
   },
   methods: {
-    submitPassChange() {
-      fetch("http://localhost:8080/v1/api/auth/updatePassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: this.$route.query.token,
-          oldPassword: this.oldPassword,
-          newPassword: this.newPassword,
-        }),
-      })
-        .then((response) =>
-          response.text().then((text) => {
-            // Make this more comprehensive and thorough
-            if (response.status == "202") {
-              this.mainStore.setSnackbar(
-                "Password Successfully Changed!",
-                "green"
-              );
-              this.$router.push("/login");
-            } else if (!response.ok) {
-              throw new Error(text);
-            }
-          })
-        )
-        .catch((e) => this.mainStore.setSnackbar(e, "red-darken-3"));
+    async submitPassChange() {
+      const body = {
+        token: this.$route.query.token,
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+      };
+
+      await postReq("v1/api/auth/updatePassword", body, {
+        202: "Password successfully changed!",
+      });
     },
     async validate() {
       let results = await this.$refs.form.validate();

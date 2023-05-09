@@ -20,6 +20,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
+import { TLD } from "@/util/util.js";
 
 export default {
   data() {
@@ -36,7 +37,7 @@ export default {
   },
   methods: {
     submitPassReset() {
-      fetch("http://localhost:8080/v1/api/auth/resetPassword", {
+      fetch(TLD + "v1/api/auth/resetPassword", {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",
@@ -46,12 +47,12 @@ export default {
         .then((response) =>
           response.text().then((text) => {
             // Make this more comprehensive and thorough
-            if (response.status == "201") {
+            if (response.status == "200") {
               this.mainStore.setSnackbar(
                 "Email successfully send if the user exists!",
                 "green"
               );
-              this.$router.push("/home");
+              this.$router.push("/");
             } else if (!response.ok) {
               throw new Error(text);
             }
