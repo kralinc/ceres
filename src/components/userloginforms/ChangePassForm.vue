@@ -65,15 +65,9 @@ export default {
         newPassword: this.newPassword,
       };
 
-      const response = postReq("v1/api/auth/updatePassword", body, {
+      await postReq("v1/api/auth/updatePassword", body, {
         202: "Password successfully changed!",
       });
-
-      if (response) {
-        this.$router.push("/login");
-      } else {
-        this.mainStore.setSnackbar(response);
-      }
     },
     async validate() {
       let results = await this.$refs.form.validate();
