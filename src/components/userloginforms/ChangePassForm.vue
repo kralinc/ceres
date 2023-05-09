@@ -3,7 +3,7 @@
     <v-card-title class="text-h6 text-md-h5 text-lg-h4"
       >Account's Email Address</v-card-title
     >
-    <v-form class="my-8">
+    <v-form ref="form" class="my-8">
       <v-text-field
         v-model="oldPassword"
         :append-inner-icon="showOldPass ? 'mdi-eye' : 'mdi-eye-off'"
@@ -52,7 +52,7 @@ export default {
       showNewPassConfirm: false,
       confirmPasswordRules: [
         (v) => !!v || "Confirming the password is required",
-        (v) => this.user.password == v || "Input must match the password",
+        (v) => this.newPassword == v || "Input must match the password",
       ],
     };
   },
