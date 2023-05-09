@@ -68,6 +68,7 @@
 <script>
 import { mapStores } from "pinia";
 import { useMainStore } from "@/stores/MainStore";
+import { postReq } from "@/util/util.js";
 
 export default {
   data() {
@@ -110,35 +111,23 @@ export default {
     };
   },
   methods: {
-    submitSignUp() {
-      fetch("http://localhost:8080/v1/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          username: this.user.username,
-          email: this.user.email,
-          password: this.user.password,
-        }),
-      })
-        .then((response) =>
-          response.text().then((text) => {
-            // Make this more comprehensive and thorough
-            if (response.status == "201") {
-              this.mainStore.setSnackbar(
-                "Successfully created an account!",
-                "green"
-              );
-              this.$router.push("/login");
-            } else if (!response.ok) {
-              throw new Error(text);
-            }
-          })
-        )
-        .catch((e) => this.mainStore.setSnackbar(e, "red-darken-3"));
+    async submitSignUp() {
+      const body = {
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        username: this.user.username,
+        email: this.user.email,
+        password: this.user.password,
+      };
+
+      const response = await postReq("v1/api/auth/signup", body, {
+        201: "Successfully created an account!",
+      });
+      if (response == "User registered successfully") {
+        this.$router.push("/login");
+      } else {
+        this.mainStore.setSnackbar(response);
+      }
     },
     async validate() {
       let results = await this.$refs.form.validate();
