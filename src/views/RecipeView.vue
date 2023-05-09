@@ -444,7 +444,6 @@ export default {
       this.isFavorite();
     }
     this.units = this.metric ? UNITS_METRIC : UNITS_IMPERIAL;
-    this.visiblePantryItems = this.pantryItems;
   },
   data() {
     return {
@@ -464,7 +463,6 @@ export default {
       dialogPublish: false,
       newReview: {},
       pantryItems: [],
-      visiblePantryItems: [],
       completeList: [],
       metric: false,
       units: {},
@@ -504,6 +502,9 @@ export default {
           this.favFlag = true;
         }
       });
+    },
+    async refresh() {
+      this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
     },
     async addRemoveFav() {
       // let recipeId = { recipeId: this.$route.params.id };
@@ -563,7 +564,7 @@ export default {
       this.loadReviews(this.$route.params.id);
       this.dialog[1] = false;
     },
-    loadCompleteList() {
+    async loadCompleteList() {
       this.completeList = this.itemsList;
       this.completeList.forEach((item) => {
         this.pantryItems.forEach((pantryItem) => {
@@ -582,19 +583,22 @@ export default {
       this.completeList.forEach((item) => {
         this.removeItem(item);
       });
-      this.pantryItems = await postReq("v1/api/inventory/getInventory", {});
+      this.completeList.forEach((item) => {
+        item.pantryCount = null;
+      });
       this.dialog[0] = false;
+      await this.refresh();
     },
     async removeItem(item) {
       let submitQuantity = 0;
-      if (parseInt(item.quantity.toFixed(3)) == item.quantityRounded) {
+      if (parseFloat(item.quantity.toFixed(3)) == item.quantityRounded) {
         submitQuantity = item.quantity;
       } else {
         submitQuantity = item.quantityRounded;
       }
       const updateInventory = {
         foodId: item.foodItem.id,
-        quantity: parseInt(submitQuantity) * -1,
+        quantity: parseFloat(submitQuantity) * -1,
         unit: item.measurementUnit,
       };
       await postReq("v1/api/inventory/updateInventory", updateInventory, {
