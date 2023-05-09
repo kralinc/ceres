@@ -540,6 +540,24 @@ export default {
       this.itemsList = await getReq("v1/api/recipes/getRecipeItems?id=" + id, {
         err: "There was a problem loading the recipe items!",
       });
+      if (this.$route.query.toSub) {
+        const subsList = await getReq(
+          "v1/api/inventory/getSub?id=" + this.$route.query.toSub,
+          {
+            err: "There was a problem loading substitutions items!",
+          }
+        );
+        this.itemsList.forEach((item) => {
+          subsList.forEach((sub) => {
+            if (
+              sub.id == this.$route.query.sub &&
+              item.foodItem.id == this.$route.query.toSub
+            ) {
+              item.foodItem = sub;
+            }
+          });
+        });
+      }
     },
     async loadReviews(id) {
       this.reviews = await getReq("v1/api/recipes/getRecipeReviews?id=" + id, {

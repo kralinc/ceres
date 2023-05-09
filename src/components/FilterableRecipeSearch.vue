@@ -104,7 +104,15 @@ export default {
         { err: "There was a problem while fetching the recipes!" }
       );
       this.pageData.filteredRecipes = this.pageData.recipes = recipeObjects.map(
-        (recipeObject) => recipeObject.recipe
+        (recipeObject) => {
+          if (recipeObject.isSubbed) {
+            recipeObject.recipe.toSub = recipeObject.foodIdToReplace;
+            recipeObject.recipe.sub = recipeObject.subbedId;
+            return recipeObject.recipe;
+          } else {
+            return recipeObject.recipe;
+          }
+        }
       );
       this.cachePantrySearchValues();
       this.doPagination();
