@@ -1,5 +1,4 @@
 <template>
-  {{ itemsList }}
   <v-row>
     <v-col cols="12">
       <v-card>
@@ -550,7 +549,10 @@ export default {
         );
         this.itemsList.forEach((item) => {
           subsList.forEach((sub) => {
-            if (sub.id == this.$route.query.sub) {
+            if (
+              sub.id == this.$route.query.sub &&
+              item.foodItem.id == this.$route.query.toSub
+            ) {
               item.foodItem = sub;
             }
           });

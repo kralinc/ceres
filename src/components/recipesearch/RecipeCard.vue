@@ -59,7 +59,7 @@ export default {
     gotoRecipePage(recipe) {
       this.$router.push({
         path: "/recipe/" + recipe.id,
-        query: { toSub: recipe.foodIdToReplace, sub: recipe.subbedId },
+        query: { toSub: recipe.toSub, sub: recipe.sub },
       });
     },
   },
