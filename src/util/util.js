@@ -1,6 +1,6 @@
 import { useMainStore } from "@/stores/MainStore";
 
-export const TLD = "http://localhost:8080/";
+export const TLD = "https://demeter-zn347lxvvq-uc.a.run.app/";
 
 export const UNITS_METRIC = {
   VOLUMETRIC: ["L", "ML"],
