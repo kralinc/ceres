@@ -31,7 +31,7 @@
       v-bind:cardType="mainStore.cardType"
     ></RecipeSearchResults>
     <div class="text-h2" v-if="this.visibleRecipeItems <= 0">
-      You don't have any personal recipes, trying adding some!
+      You don't have any personal recipes, try adding some!
     </div>
   </v-row>
 </template>
