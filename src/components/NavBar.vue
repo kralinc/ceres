@@ -2,7 +2,9 @@
   <v-app-bar color="green-darken-1" prominent>
     <v-row>
       <v-col align="left">
-        <v-toolbar-title class="mt-2 ml-12">MyKitchen</v-toolbar-title></v-col
+        <v-toolbar-title class="mt-2 ml-12" @click="$router.push('/')"
+          >MyKitchen</v-toolbar-title
+        ></v-col
       >
       <v-col align="right">
         <v-btn icon class="mr-4">
