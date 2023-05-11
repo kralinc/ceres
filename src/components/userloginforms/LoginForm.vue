@@ -16,6 +16,7 @@
         name="input-10-1"
         label="Password"
         @click:append-inner="showPassLogin = !showPassLogin"
+        @keyup.enter="submitLogin"
         class="mx-3 my-1"
       ></v-text-field>
 
