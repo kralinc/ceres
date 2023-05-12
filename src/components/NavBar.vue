@@ -2,10 +2,11 @@
   <v-app-bar color="green-darken-1" prominent>
     <v-row>
       <v-col align="left">
-        <v-toolbar-title class="mt-2 ml-12" @click="$router.push('/')"
-          >MyKitchen</v-toolbar-title
-        ></v-col
-      >
+        <v-toolbar-title class="mt-2 ml-12 title-hover"
+        @click="$router.push('/')">
+          MyKitchen
+        </v-toolbar-title>
+      </v-col>
       <v-col align="right">
         <v-btn icon class="mr-4">
           <v-avatar
@@ -120,3 +121,16 @@ export default {
   },
 };
 </script>
+
+
+<style>
+  .title-hover {
+    transition:font-size .5s;
+    -moz-transition:font-size .5s; /* Firefox 4 */
+    -webkit-transition:font-size .5s; /* Safari and Chrome */
+    -o-transition:font-size .5s;
+  }
+  .title-hover:hover {
+    font-size: 22px;
+  }
+</style>

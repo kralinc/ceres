@@ -27,10 +27,12 @@
             @input="filterFoodItems"
           ></v-text-field>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="px-6">
           <v-table>
             <tr v-for="item in cart" :key="item.id">
-              <td>{{ item.name }}</td>
+              <td class="text-h6 font-weight-medium text-green-darken-4">
+                {{ item.name }}
+              </td>
               <td>
                 <v-text-field
                   type="number"
@@ -47,7 +49,7 @@
           </v-table>
         </v-col>
         <template v-for="foodItem of visibleFoodItems" v-bind:key="foodItem.id">
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="6" class="px-6">
             <FoodItemSearchCard
               v-bind:item="foodItem"
               @click="addFoodItemToCart(foodItem)"
