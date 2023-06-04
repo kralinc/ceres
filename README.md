@@ -1,5 +1,7 @@
 # Ceres - Frontend for the MyKitchen app
 
+## The backend (demeter) can be found here: https://github.com/jaronritter01/demeter
+
 ## Project setup
 
 ### Install Dependencies
